@@ -1,8 +1,9 @@
 from easygame import *
 from math import *
+from random import *
 
-window_height = 1000
-window_width = 1800
+window_height = 600
+window_width = 1000
 
 open_window('Easy Game!', window_width, window_height)
 should_quit = False
