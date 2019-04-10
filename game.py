@@ -7,6 +7,10 @@ from Mob import *
 from Spawner import *
 from Particles import *
 import time
+<<<<<<< HEAD
+=======
+
+>>>>>>> d96a3ea01395fcf983d539f0b65e1b64c6ac5c1f
 
 window_width = 1800
 window_height = 1000
@@ -17,10 +21,15 @@ koniec = False
 open_window('PELKO', window_width, window_height)
 should_quit = False
 cam_pos = [0, 0]
-dick = Player()
+dick = Player(map_width, map_height)
 spawnery, zombiky, bullets = [], [], []
 mouseX, mouseY, frameCount = 0, 0, 0
-start = 0
+start = time.time()
+
+
+def create_spawner():
+    spawnery.append(Spawner(
+        randint(-map_width / 2, map_width / 2), randint(-map_height / 2, map_height / 2), 100))
 
 
 def check(x, y, done):
@@ -41,7 +50,7 @@ def tlacidka():
 def hud():
     draw_text("HP: " + str(dick.hp), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+10, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
-    draw_text("Ability 1:  " + str(dick.cooldowns['ability1']), 'Fixedsys', 20, position=(
+    draw_text("Turbo:  " + str(dick.cooldowns['turbo']), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+window_width/4, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
     draw_text("Ability 2:  " + str(dick.cooldowns['ability2']), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+window_width/2, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
@@ -55,6 +64,8 @@ def separate(a, b):
     a.y += dif[1]
 
 
+for i in range(3):
+    create_spawner()
 while not should_quit:
     for event in poll_events():
         if type(event) is CloseEvent:
@@ -88,9 +99,9 @@ while not should_quit:
                  (map_width/2, map_height/2), (-map_width/2, map_height/2), color=(0, 1, 0, 1))
     hud()
 
-    if start == 0 or time.time() - start > 20:
-        spawnery.append(Spawner(
-            randint(-map_width / 2, map_width / 2), randint(-map_height / 2, map_height / 2), 100))
+    if time.time() - start > 20:
+        print(time.time(), start)
+        create_spawner()
         start = time.time()
 
     for i in spawnery:
@@ -109,7 +120,7 @@ while not should_quit:
     for i in zombiky:
         i.chase(dick, bullets)
         if not i.dead:
-            i.update()
+            i.update(dick.x, dick.y)
             newzombiz.append(i)
     zombiky = newzombiz
 
@@ -122,7 +133,7 @@ while not should_quit:
     spawnery = newspawners
 
     dick.move()
-    dick.update(mouseX, mouseY, window_width, window_height)
+    dick.update(mouseX, mouseY)
     move_camera(position=(0, 0), rotation=None, zoom=None)
 
     if not dick.dead:
