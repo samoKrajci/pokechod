@@ -2,11 +2,7 @@ from easygame import *
 from math import *
 
 
-key = {}
-key['W'] = False
-key['S'] = False
-key['A'] = False
-key['D'] = False
+key = {'W': False, 'S': False, 'A': False, 'D': False}
 
 
 class Player:
