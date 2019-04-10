@@ -10,11 +10,11 @@ mob_cooldown = sec(5)
 
 
 class Mob:
-    def __init__(self, x, y, vel, size):
+    def __init__(self, x, y, vel):
         self.x = x
         self.y = y
         self.cooldown = 0
-        self.size = size
+        self.size = 50
         self.vel = vel
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
@@ -37,7 +37,5 @@ class Mob:
     def update(self):
         draw_image(load_image('img/mob.png'),
                    position=(self.x, self.y))
-        # draw_circle(center=(self.x, self.y),
-        #            radius=self.size, color=(0, 0, 0, 1))
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)

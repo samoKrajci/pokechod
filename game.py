@@ -1,4 +1,4 @@
-from easygame import *
+#from easygame import *
 from math import *
 from random import *
 from Bullet import *
@@ -9,15 +9,12 @@ from Spawner import *
 
 window_width = 800
 window_height = 600
-map_width = 800
-map_height = 600
+map_width = 1800
+map_height = 1000
 
 open_window('Easy Game!', window_width, window_height)
 should_quit = False
 cam_pos = [0, 0]
-set_camera(center=(window_width/2, window_height/2),
-           position=(cam_pos[0], cam_pos[1]))
-
 dick = Player()
 spawnery, zombiky, bullets = [], [], []
 mouseX, mouseY, frameCount = 0, 0, 0
@@ -34,7 +31,9 @@ def tlacidka():
         key[event.key] = True
         if event.key == 'P':
             spawnery.append(Spawner(
-                randint(-map_width / 2, map_width / 2), randint(-map_height / 2, map_height / 2), 1000))
+                randint(-map_width / 2, map_width / 2), randint(-map_height / 2, map_height / 2), 100))
+        if event.key == 'X':
+            dick.set_turbo()
     if type(event) is KeyUpEvent:
         key[event.key] = False
 
@@ -60,21 +59,17 @@ while not should_quit:
     for event in poll_events():
         if type(event) is CloseEvent:
             should_quit = True
-        if type(event) is KeyDownEvent:
-            if event.key == 'P':
-                spawnery.append(Spawner(
-                    randint(-map_width/2, map_width/2), randint(-map_height/2, map_height/2), 1000))
-            if event.key == 'X':
-                dick.set_turbo()
-
         if type(event) is MouseMoveEvent:
-            mouseX = event.x
-            mouseY = event.y
+            mouseX = event.x - window_width/2 + cam_pos[0]
+            mouseY = event.y - window_height/2 + cam_pos[1]
         tlacidka()
 
-    if frameCount == sec(0.7):
-        bullets.append(Bullet(dick.x, dick.y, mouseX -
-                              window_width/2, mouseY-window_height/2))
+    cam_pos = [(dick.x+mouseX)/2, (dick.y+mouseY)/2]
+    set_camera(center=(window_width/2, window_height/2),
+               position=(cam_pos[0], cam_pos[1]))
+
+    if frameCount == sec(0.7)+10:
+        bullets.append(Bullet(dick.x, dick.y, mouseX, mouseY))
         frameCount = 0
     else:
         frameCount += 1
@@ -83,6 +78,7 @@ while not should_quit:
         for j in zombiky:
             if i != j:
                 separate(i, j)
+        separate(i, dick)
 
     fill(1, 1, 0)
     draw_polygon((-map_width/2, -map_height/2), (map_width/2, -map_height/2),
@@ -91,8 +87,8 @@ while not should_quit:
 
     for i in spawnery:
         i.update()
-        if i.hp > 0 and randint(0, 1000) < 5:
-            zombiky.append(Mob(i.x, i.y, 2.8, 10))
+        if randint(0, 1000) < 5:
+            zombiky.append(Mob(i.x, i.y, 2.8))
 
     newbullets = []
     for i in bullets:
@@ -112,8 +108,8 @@ while not should_quit:
         newspawners.append(i)
     spawnery = newspawners
 
-    dick.update()
     dick.move()
+    dick.update(mouseX, mouseY, window_width, window_height)
     move_camera(position=(0, 0), rotation=None, zoom=None)
     next_frame()
 
