@@ -20,9 +20,9 @@ class Player:
         self.turbo = 0
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
-        self.cooldowns = {'ability1': 5, 'ability2': 10, 'ability3': 30}
+        self.cooldowns = {'turbo': 15, 'ability2': 20, 'ability3': 30}
 
-    def update(self, mouseX, mouseY, window_width, window_height):
+    def update(self, mouseX, mouseY):
         angle = atan2((self.y - mouseY),
                       (self.x - mouseX)) - degrees(90)
         self.turbo -= 1
