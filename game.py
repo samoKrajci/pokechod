@@ -9,10 +9,10 @@ should_quit = False
 set_camera(center=(window_width/2, window_height/2), position=(0, 0))
 
 key = {}
-key['UP'] = False
-key['DOWN'] = False
-key['LEFT'] = False
-key['RIGHT'] = False
+key['W'] = False
+key['S'] = False
+key['A'] = False
+key['D'] = False
 
 
 def tlacidka():
@@ -38,7 +38,10 @@ class Mob:
         self.y += y_dif_new
 
     def update(self):
-        draw_image(load_image('img/zombie_lvl1.png'), position=(self.x, self.y), scale=0.15, opacity=1)
+        if self.x == dick.x and self.y == dick.y:
+            return
+        angle = atan2((self.y-dick.y), (self.x-dick.x))-degrees(90)
+        draw_image(load_image('img/zombie.png'), position=(self.x, self.y), scale=1, rotation=angle, opacity=1)
 
 
 class Player:
@@ -51,13 +54,13 @@ class Player:
         draw_circle(center=(self.x, self.y), radius=50, color=(1, 1, 1, 1))
 
     def move(self):
-        if key['UP']:
+        if key['W']:
             self.y += self.vel
-        if key['DOWN']:
+        if key['S']:
             self.y -= self.vel
-        if key['LEFT']:
+        if key['A']:
             self.x -= self.vel
-        if key['RIGHT']:
+        if key['D']:
             self.x += self.vel
 
 
