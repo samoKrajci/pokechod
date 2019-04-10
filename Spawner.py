@@ -7,10 +7,11 @@ class Spawner:
         self.y = y
         self.size = 90
         self.hp = hp
+        self.max_hp = hp
 
     def update(self):
         draw_image(load_image('img/spawner.png'),
                    position=(self.x, self.y))
-        if self.hp > 0:
-            draw_circle(center=(self.x, self.y), radius=self.size,
-                        color=(0, 0, 0, 1-1/(101-self.hp)))
+        draw_circle(center=(self.x, self.y), radius=self.size,
+                    color=(0, 0, 0, 1-self.hp/self.max_hp))
+        print(self.hp)

@@ -18,6 +18,7 @@ class Player:
         self.hp = 10
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
+        self.cooldowns = {'ability1': 5, 'ability2': 10, 'ability3': 30}
 
     def update(self):
         draw_image(load_image('img/hrac.png'),

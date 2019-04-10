@@ -20,7 +20,7 @@ set_camera(center=(window_width/2, window_height/2),
 
 
 def check(x, y):
-    if x > map_width/2 or x < map_width/2 or y > map_height/2 or y < map_height/2:
+    if x > map_width/2 or x < -map_width/2 or y > map_height/2 or y < -map_height/2:
         return True
     return False
 
@@ -33,8 +33,14 @@ def tlacidka():
 
 
 def hud():
-    draw_text("HP: " + str(dick.hp), 'Fixedsys', 32, position=(
+    draw_text("HP: " + str(dick.hp), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+10, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
+    draw_text("Ability 1:  " + str(dick.cooldowns['ability1']) + 's', 'Fixedsys', 20, position=(
+        cam_pos[0]-window_width/2+150, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
+    draw_text("Ability 2:  " + str(dick.cooldowns['ability2']) + 's', 'Fixedsys', 20, position=(
+        cam_pos[0]-window_width/2+350, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
+    draw_text("Ability 3:  " + str(dick.cooldowns['ability3']) + 's', 'Fixedsys', 20, position=(
+        cam_pos[0]-window_width/2+550, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
 
 
 def separate(a, b):
