@@ -10,17 +10,29 @@ import time
 
 window_width = 1800
 window_height = 1000
-map_width = 3000
-map_height = 3000
+map_width = 2000
+map_height = 2000
 
 koniec = False
 open_window('PELKO', window_width, window_height)
 should_quit = False
 cam_pos = [0, 0]
 dick = Player(map_width, map_height)
-spawnery, zombiky, bullets = [], [], []
+stromy, sutre, spawnery, zombiky, bullets = [], [], [], [], []
 mouseX, mouseY, frameCount = 0, 0, 0
 start = time.time()
+
+poc_stromy = randint(0, map_width*map_height/200000)
+poc_sutre = randint(0, map_width*map_height/200000)
+print(poc_stromy)
+print(poc_sutre)
+
+for i in range(poc_stromy):
+    stromy.append(Tree(randint(0, map_width)-map_width /
+                       2, randint(0, map_height)-map_height/2))
+for i in range(poc_stromy):
+    sutre.append(Rock(randint(0, map_width)-map_width /
+                      2, randint(0, map_height)-map_height/2))
 
 
 def create_spawner():
@@ -108,6 +120,11 @@ while not should_quit:
         i.update()
         if randint(0, 1000) < 5:
             zombiky.append(Mob(i.x, i.y, 2.8))
+
+    for suter in sutre:
+        suter.update()
+    for strom in stromy:
+        strom.update()
 
     newbullets = []
     for i in bullets:
