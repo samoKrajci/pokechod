@@ -16,10 +16,11 @@ class Mob:
         self.cooldown = 0
         self.size = 50
         self.vel = vel
+        self.dead = False
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
 
-    def chase(self, target):
+    def chase(self, target, bullets):
         if self.cooldown != 0:
             self.cooldown -= 1
             return
@@ -33,6 +34,12 @@ class Mob:
         if vect != (0, 0):
             target.hp -= 1
             self.cooldown = mob_cooldown
+        for i in bullets:
+            vect = fix_rectangle_overlap(self.hitbox, i.hitbox)
+            if vect != (0, 0):
+                self.dead = True
+                break
+
 
     def update(self):
         draw_image(load_image('img/mob.png'),

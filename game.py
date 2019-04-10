@@ -97,9 +97,13 @@ while not should_quit:
             newbullets.append(i)
     bullets = newbullets
 
+    newzombiz = []
     for i in zombiky:
-        i.chase(dick)
-        i.update()
+        i.chase(dick, bullets)
+        if not i.dead:
+            i.update()
+            newzombiz.append(i)
+    zombiky = newzombiz
 
     newspawners = []
     for i in spawnery:
