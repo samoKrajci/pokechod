@@ -11,18 +11,21 @@ key = {'W': False, 'S': False, 'A': False, 'D': False}
 
 class Player:
     def __init__(self):
+        self.dead = False
         self.x = 0
         self.y = 0
         self.vel = 5
         self.startingVel = 5
         self.size = 30
-        self.hp = 10
+        self.hp = 5
         self.turbo = 0
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
         self.cooldowns = {'ability1': 5, 'ability2': 10, 'ability3': 30}
 
     def update(self, mouseX, mouseY, window_width, window_height):
+        if self.hp <= 0:
+            self.dead = True
         angle = atan2((self.y - mouseY),
                       (self.x - mouseX)) + pi/2
         #angle = 0

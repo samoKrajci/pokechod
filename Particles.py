@@ -16,7 +16,13 @@ class Tree:
 
 
 class Rock:
-    def __init__(self):
-        self.size = 30
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.size = 130
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
+
+    def update(self):
+        draw_image(load_image('img/suter.png'),
+                   position=((self.x, self.y)))
