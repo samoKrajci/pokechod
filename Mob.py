@@ -15,7 +15,7 @@ class Mob:
         self.y = y
         self.cooldown = 0
         self.size = 50
-        self.vel = vel
+        self.vel = vel+2
         self.dead = False
         self.frozen = 0
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
@@ -25,6 +25,12 @@ class Mob:
         if self.frozen == 0:
             if self.cooldown != 0:
                 self.cooldown -= 1
+                for i in bullets:
+                    vect = fix_rectangle_overlap(self.hitbox, i.hitbox)
+                    if vect != (0, 0):
+                        i.gone = True
+                        self.dead = True
+                        break
                 return
             x_dif = target.x-self.x
             y_dif = target.y-self.y

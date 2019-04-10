@@ -21,10 +21,10 @@ class Player:
         self.y = 0
         self.mw = mw
         self.mh = mh
-        self.vel = 5
+        self.vel = 7
         self.startingVel = 5
         self.size = 30
-        self.hp = 1
+        self.hp = 5
         self.turbo = 0
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
