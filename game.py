@@ -6,6 +6,7 @@ from Player import *
 from Mob import *
 from Spawner import *
 from Particles import *
+from time import time
 
 
 window_width = 1800
