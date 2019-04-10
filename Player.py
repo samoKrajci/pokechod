@@ -53,8 +53,8 @@ class Player:
             self.y -= self.vel
         if key['A'] and not check(self.x - self.vel, self.y, self.mw, self.mh):
             self.x -= self.vel
-        if key['D'] and check(self.x + self.vel, self.y, self.mw, self.mh):
-            self.x += not self.vel
+        if key['D'] and notcheck(self.x + self.vel, self.y, self.mw, self.mh):
+            self.x += self.vel
 
     def set_turbo(self):
         self.turbo = sec(4)
