@@ -11,17 +11,22 @@ window_width = 800
 window_height = 600
 map_width = 800
 map_height = 600
-
 open_window('Easy Game!', window_width, window_height)
 should_quit = False
 cam_pos = [0, 0]
 set_camera(center=(window_width/2, window_height/2),
            position=(cam_pos[0], cam_pos[1]))
+dick = Player()
+spawnery, zombiky, bullets = [], [], []
+mouseX, mouseY, frameCount = 0, 0, 0
 
 
 def tlacidka():
     if type(event) is KeyDownEvent:
         key[event.key] = True
+        if event.key == 'P':
+            spawnery.append(Spawner(
+                randint(-map_width / 2, map_width / 2), randint(-map_height / 2, map_height / 2), 100))
     if type(event) is KeyUpEvent:
         key[event.key] = False
 
@@ -29,12 +34,12 @@ def tlacidka():
 def hud():
     draw_text("HP: " + str(dick.hp), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+10, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
-    draw_text("Ability 1:  " + str(dick.cooldowns['ability1']) + 's', 'Fixedsys', 20, position=(
-        cam_pos[0]-window_width/2+150, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
-    draw_text("Ability 2:  " + str(dick.cooldowns['ability2']) + 's', 'Fixedsys', 20, position=(
-        cam_pos[0]-window_width/2+350, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
-    draw_text("Ability 3:  " + str(dick.cooldowns['ability3']) + 's', 'Fixedsys', 20, position=(
-        cam_pos[0]-window_width/2+550, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
+    draw_text("Ability 1:  " + str(dick.cooldowns['ability1']), 'Fixedsys', 20, position=(
+        cam_pos[0]-window_width/2+window_width/4, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
+    draw_text("Ability 2:  " + str(dick.cooldowns['ability2']), 'Fixedsys', 20, position=(
+        cam_pos[0]-window_width/2+window_width/2, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
+    draw_text("Ability 3:  " + str(dick.cooldowns['ability3']), 'Fixedsys', 20, position=(
+        cam_pos[0]-window_width/2+3*window_width/4, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
 
 
 def separate(a, b):
@@ -43,18 +48,10 @@ def separate(a, b):
     a.y += dif[1]
 
 
-dick = Player()
-spawnery, zombiky, bullets = [], [], []
-mouseX, mouseY, frameCount = 0, 0, 0
-
 while not should_quit:
     for event in poll_events():
         if type(event) is CloseEvent:
             should_quit = True
-        if type(event) is KeyDownEvent:
-            if event.key == 'P':
-                spawnery.append(Spawner(
-                    randint(-map_width/2, map_width/2), randint(-map_height/2, map_height/2), 100))
         if type(event) is MouseMoveEvent:
             mouseX = event.x
             mouseY = event.y
@@ -78,8 +75,9 @@ while not should_quit:
 
     for i in spawnery:
         i.update()
-        if randint(0, 1000) < 5:
+        if i.hp > 0 and randint(0, 1000) < 5:
             zombiky.append(Mob(i.x, i.y, 2.8, 10))
+            print(i.hp)
 
     for i in bullets:
         i.update()
