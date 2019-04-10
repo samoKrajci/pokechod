@@ -11,6 +11,7 @@ window_width = 800
 window_height = 600
 map_width = 800
 map_height = 600
+
 open_window('Easy Game!', window_width, window_height)
 should_quit = False
 cam_pos = [0, 0]
@@ -21,12 +22,18 @@ spawnery, zombiky, bullets = [], [], []
 mouseX, mouseY, frameCount = 0, 0, 0
 
 
+def check(x, y):
+    if x > map_width/2 or x < -map_width/2 or y > map_height/2 or y < -map_height/2:
+        return True
+    return False
+
+
 def tlacidka():
     if type(event) is KeyDownEvent:
         key[event.key] = True
         if event.key == 'P':
             spawnery.append(Spawner(
-                randint(-map_width / 2, map_width / 2), randint(-map_height / 2, map_height / 2), 100))
+                randint(-map_width / 2, map_width / 2), randint(-map_height / 2, map_height / 2), 1000))
     if type(event) is KeyUpEvent:
         key[event.key] = False
 
@@ -77,10 +84,13 @@ while not should_quit:
         i.update()
         if i.hp > 0 and randint(0, 1000) < 5:
             zombiky.append(Mob(i.x, i.y, 2.8, 10))
-            print(i.hp)
 
     for i in bullets:
-        i.update()
+        if check(i.x, i.y):
+            i, bullets[len(bullets)-1] = bullets[len(bullets)-1], i
+            bullets.pop()
+        else:
+            i.update()
 
     for i in zombiky:
         i.chase(dick)

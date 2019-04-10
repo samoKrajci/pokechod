@@ -7,7 +7,7 @@ class Bullet:
         self.x = x
         self.y = y
         self.vel = vel
-        self.size = 4
+        self.size = 6
         x_dif = mx - self.x
         y_dif = my - self.y
         self.x_dif_new = x_dif / sqrt(x_dif ** 2 + y_dif ** 2 + 1) * self.vel
