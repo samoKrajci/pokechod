@@ -34,7 +34,7 @@ class Mob:
             target.hp -= 1
             self.cooldown = mob_cooldown
 
-    def update(self, dick_x, dick_y):
+    def update(self):
         draw_image(load_image('img/mob.png'),
                    position=(self.x, self.y))
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,

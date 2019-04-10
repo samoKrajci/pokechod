@@ -24,7 +24,6 @@ class Player:
 
     def update(self, mouseX, mouseY, window_width, window_height):
         angle = atan2((self.y + window_height/2 - mouseY), (self.x + window_width/2 - mouseX)) - degrees(90)
-    def update(self):
         self.turbo -= 1
         if self.turbo > 0:
             self.vel = self.startingVel * 2
