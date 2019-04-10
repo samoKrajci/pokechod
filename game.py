@@ -1,4 +1,3 @@
-#from easygame import *
 from math import *
 from random import *
 from Bullet import *
@@ -113,7 +112,8 @@ while not should_quit:
     for i in spawnery:
         if sqrt((dick.x-i.x)**2 + (dick.y-i.y)**2) < dick.size+i.size:
             i.hp -= 1
-        newspawners.append(i)
+        if i.hp > 0:
+            newspawners.append(i)
     spawnery = newspawners
 
     dick.move()
