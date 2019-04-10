@@ -23,10 +23,12 @@ stromy, sutre, spawnery, zombiky, bullets = [], [], [], [], []
 mouseX, mouseY, frameCount = 0, 0, 0
 start = time.time()
 
-poc_stromy = randint(0, map_width*map_height/200000)
-poc_sutre = randint(0, map_width*map_height/200000)
-print(poc_stromy)
-print(poc_sutre)
+#poc_stromy = randint(0, map_width*map_height/200000)
+#poc_sutre = randint(0, map_width*map_height/200000)
+poc_stromy = randint(0, 6)
+poc_sutre = randint(0, 6)
+# print(poc_stromy)
+# print(poc_sutre)
 
 for i in range(poc_stromy):
     stromy.append(Tree(randint(0, map_width)-map_width /
@@ -98,7 +100,7 @@ while not should_quit:
             mouseY = event.y - window_height/2 + cam_pos[1]
         tlacidka()
         if type(event) is MouseDownEvent:
-            if event.button == 'LEFT' and frameCount == 0:
+            if event.button == 'LEFT' and frameCount <= 0:
                 bullets.append(Bullet(dick.x, dick.y, mouseX, mouseY))
                 frameCount = 30
 
@@ -131,11 +133,6 @@ while not should_quit:
         if randint(0, 1000) < 5:
             zombiky.append(Mob(i.x, i.y, 2.8))
 
-    for suter in sutre:
-        suter.update()
-    for strom in stromy:
-        strom.update()
-
     newbullets = []
     for i in bullets:
         if not check(i.x, i.y, i.gone):
@@ -164,6 +161,17 @@ while not should_quit:
     dick.move()
     dick.update(mouseX, mouseY)
     move_camera(position=(0, 0), rotation=None, zoom=None)
+
+    for suter in sutre:
+        suter.update()
+        separate(dick, suter)
+        for zom in zombiky:
+            separate(zom, suter)
+    for strom in stromy:
+        strom.update()
+        separate(dick, strom)
+        for zom in zombiky:
+            separate(zom, strom)
 
     if not dick.dead:
         next_frame()
