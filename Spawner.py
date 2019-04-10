@@ -10,4 +10,5 @@ class Spawner:
 
     def update(self):
         if self.hp > 0:
-            draw_circle(center=(self.x, self.y), radius=self.size, color=(1/(101-self.hp), 0, 0, 1))
+            draw_circle(center=(self.x, self.y), radius=self.size, color=(self.hp/100, 0, 0, 1))
+            print(self.hp)
