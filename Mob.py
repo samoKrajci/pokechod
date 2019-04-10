@@ -34,10 +34,8 @@ class Mob:
             target.hp -= 1
             self.cooldown = mob_cooldown
 
-    def update(self):
+    def update(self, dick_x, dick_y):
         draw_image(load_image('img/mob.png'),
                    position=(self.x, self.y))
-        # draw_circle(center=(self.x, self.y),
-        #            radius=self.size, color=(0, 0, 0, 1))
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)

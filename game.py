@@ -94,14 +94,14 @@ while not should_quit:
 
     for i in zombiky:
         i.chase(dick)
-        i.update()
+        i.update(dick.x, dick.y)
 
     for i in spawnery:
         if sqrt((dick.x-i.x)**2 + (dick.y-i.y)**2) < dick.size+i.size:
             i.hp -= 1
-
+    #print(dick.x, dick.y)
     dick.move()
-    dick.update()
+    dick.update(mouseX, mouseY, window_width, window_height)
     move_camera(position=(0, 0), rotation=None, zoom=None)
     next_frame()
 

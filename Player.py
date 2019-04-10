@@ -16,11 +16,10 @@ class Player:
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
         self.cooldowns = {'ability1': 5, 'ability2': 10, 'ability3': 30}
 
-    def update(self):
+    def update(self, mouseX, mouseY, window_width, window_height):
+        angle = atan2((self.y + window_height/2 - mouseY), (self.x + window_width/2 - mouseX)) - degrees(90)
         draw_image(load_image('img/hrac.png'),
-                   position=(self.x, self.y))
-        # draw_circle(center=(self.x, self.y),
-        #            radius=self.size, color=(0, 0, 1, 1))
+                   position=(self.x, self.y), rotation=angle)
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
 
