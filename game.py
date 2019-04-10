@@ -105,9 +105,12 @@ while not should_quit:
         i.chase(dick)
         i.update()
 
+    newspawners = []
     for i in spawnery:
         if sqrt((dick.x-i.x)**2 + (dick.y-i.y)**2) < dick.size+i.size:
             i.hp -= 1
+        newspawners.append(i)
+    spawnery = newspawners
 
     dick.update()
     dick.move()
