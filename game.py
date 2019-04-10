@@ -1,6 +1,7 @@
 from easygame import *
 from math import *
 from random import *
+from bullets import *
 from Player import *
 from Mob import *
 from Spawner import *
@@ -37,8 +38,8 @@ def separate(a, b):
 
 
 dick = Player()
-spawnery = []
-zombiky = []
+spawnery, zombiky, bullets = [], [], []
+mouseX, mouseY, frameCount = 0, 0, 0
 
 while not should_quit:
     for event in poll_events():
@@ -47,7 +48,15 @@ while not should_quit:
         if type(event) is KeyDownEvent:
             if event.key == 'P':
                 spawnery.append(Spawner(randint(-map_width/2, map_width/2), randint(-map_height/2, map_height/2), 100))
+        if type(event) is MouseMoveEvent:
+            mouseX = event.x
+            mouseY = event.y
         tlacidka()
+    if frameCount == sec(0.7):
+        bullets.append(Bullet(dick.x, dick.y, mouseX, mouseY))
+        frameCount = 0
+    else:
+        frameCount += 1
 
     for i in zombiky:
         for j in zombiky:
@@ -63,6 +72,9 @@ while not should_quit:
         i.update()
         if randint(0, 1000) < 5:
             zombiky.append(Mob(i.x, i.y, 2.8, 10))
+
+    for i in bullets:
+        i.update()
 
     for i in zombiky:
         i.chase(dick)
