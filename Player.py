@@ -10,12 +10,12 @@ key['D'] = False
 
 
 class Player:
-    def __init__(self, size, vel, hp):
+    def __init__(self):
         self.x = 0
         self.y = 0
-        self.vel = vel
-        self.size = size
-        self.hp = hp
+        self.vel = 5
+        self.size = 30
+        self.hp = 10
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
 

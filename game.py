@@ -3,6 +3,7 @@ from math import *
 from random import *
 from Player import *
 from Mob import *
+from Spawner import *
 
 
 window_height = 600
@@ -35,7 +36,7 @@ def separate(a, b):
     a.y += dif[1]
 
 
-dick = Player(30, 5, 10)
+dick = Player()
 spawnery = []
 zombiky = []
 
@@ -45,8 +46,7 @@ while not should_quit:
             should_quit = True
         if type(event) is KeyDownEvent:
             if event.key == 'P':
-                spawnery.append([randint(-map_width/2, map_width/2),
-                                 randint(-map_height/2, map_height/2)])
+                spawnery.append(Spawner(randint(-map_width/2, map_width/2), randint(-map_height/2, map_height/2), 100))
         tlacidka()
 
     for i in zombiky:
@@ -55,20 +55,22 @@ while not should_quit:
                 separate(i, j)
 
     fill(1, 1, 0)
-
     draw_polygon((-map_width/2, -map_height/2), (map_width/2, -map_height/2),
                  (map_width/2, map_height/2), (-map_width/2, map_height/2), color=(0, 1, 0, 1))
     hud()
 
     for i in spawnery:
-        draw_circle(center=(i[0], i[1]),
-                    radius=20, color=(1, 1, 0, 1))
+        i.update()
         if randint(0, 1000) < 5:
-            zombiky.append(Mob(i[0], i[1], 3, 10))
+            zombiky.append(Mob(i.x, i.y, 2.8, 10))
 
     for i in zombiky:
         i.chase(dick)
         i.update()
+
+    for i in spawnery:
+        if sqrt((dick.x-i.x)**2 + (dick.y-i.y)**2) < dick.size+i.size:
+            i.hp -= 1
 
     dick.move()
     dick.update()
