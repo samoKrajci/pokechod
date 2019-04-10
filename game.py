@@ -8,8 +8,8 @@ from Spawner import *
 from Particles import *
 
 
-window_width = 1800
-window_height = 1000
+window_width = 800
+window_height = 600
 map_width = 1800
 map_height = 1000
 
@@ -100,17 +100,20 @@ while not should_quit:
             newbullets.append(i)
     bullets = newbullets
 
+    newzombiz = []
     for i in zombiky:
-        i.chase(dick)
-        i.update()
+        i.chase(dick, bullets)
+        if not i.dead:
+            i.update()
+            newzombiz.append(i)
+    zombiky = newzombiz
 
-    newspawns = []
+    newspawners = []
     for i in spawnery:
-        if i.hp > 0:
-            if sqrt((dick.x-i.x)**2 + (dick.y-i.y)**2) < dick.size+i.size:
-                i.hp -= 1
-            newspawns.append(i)
-    spawnery = newspawns
+        if sqrt((dick.x-i.x)**2 + (dick.y-i.y)**2) < dick.size+i.size:
+            i.hp -= 1
+        newspawners.append(i)
+    spawnery = newspawners
 
     dick.move()
     dick.update(mouseX, mouseY, window_width, window_height)

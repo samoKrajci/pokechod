@@ -8,8 +8,6 @@ class Spawner:
         self.size = 90
         self.hp = hp
         self.max_hp = hp
-        print(self.hp, end=' ')
-        print(self.max_hp)
 
     def update(self):
         draw_image(load_image('img/spawner.png'),
