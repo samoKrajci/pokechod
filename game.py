@@ -11,13 +11,13 @@ key['RIGHT'] = False
 
 
 def move(vect, vel):
-    if['UP']:
+    if key['UP']:
         vect[1] += vel
-    if['DOWN']:
+    if key['DOWN']:
         vect[1] -= vel
-    if['LEFT']:
+    if key['LEFT']:
         vect[0] -= vel
-    if['RIGHT']:
+    if key['RIGHT']:
         vect[0] += vel
     return vect
 
