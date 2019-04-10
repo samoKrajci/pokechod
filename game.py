@@ -1,10 +1,11 @@
-#from easygame import *
+from easygame import *
 from math import *
 from random import *
 from Bullet import *
 from Player import *
 from Mob import *
 from Spawner import *
+from Particles import *
 
 
 window_width = 1800
@@ -18,6 +19,8 @@ cam_pos = [0, 0]
 dick = Player()
 spawnery, zombiky, bullets = [], [], []
 mouseX, mouseY, frameCount = 0, 0, 0
+
+strom = Tree(300, 300)
 
 
 def check(x, y):
@@ -112,6 +115,10 @@ while not should_quit:
     dick.move()
     dick.update(mouseX, mouseY, window_width, window_height)
     move_camera(position=(0, 0), rotation=None, zoom=None)
+
+    strom.update()
+    separate(dick, strom)
+
     next_frame()
 
 close_window()
