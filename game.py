@@ -13,6 +13,7 @@ window_height = 1000
 map_width = 2000
 map_height = 2000
 
+score = 0
 koniec = False
 open_window('PELKO', window_width, window_height)
 should_quit = False
@@ -49,11 +50,17 @@ def check(x, y, done):
 def tlacidka():
     if type(event) is KeyDownEvent:
         key[event.key] = True
-        if event.key == 'X':
+        if event.key == 'X' and dick.cooldowns['turbo'] == 0:
             dick.set_turbo()
-        if event.key == 'C':
+            dick.cooldowns['turbo'] = sec(10)
+        if event.key == 'C' and dick.cooldowns['freeze'] == 0:
+            dick.cooldowns['freeze'] = sec(15)
             for i in zombiky:
                 i.frozen = sec(2)
+        if event.key == 'V' and dick.cooldowns['as'] == 0:
+            dick.cooldowns['freeze'] = sec(20)
+            global frameCount
+            #frameCount = 10
 
     if type(event) is KeyUpEvent:
         key[event.key] = False
@@ -62,12 +69,14 @@ def tlacidka():
 def hud():
     draw_text("HP: " + str(dick.hp), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+10, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
-    draw_text("Turbo:  " + str(dick.cooldowns['turbo']), 'Fixedsys', 20, position=(
+    draw_text("Turbo:  " + str(int(dick.cooldowns['turbo']/40)), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+window_width/4, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
-    draw_text("Ability 2:  " + str(dick.cooldowns['ability2']), 'Fixedsys', 20, position=(
+    draw_text("Freeze:  " + str(int(dick.cooldowns['freeze']/40)), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+window_width/2, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
-    draw_text("Ability 3:  " + str(dick.cooldowns['ability3']), 'Fixedsys', 20, position=(
+    draw_text("Attack speed:  " + str(int(dick.cooldowns['as']/40)), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+3*window_width/4, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
+    draw_text("Score:  " + str(score), 'Fixedsys', 20, position=(
+        cam_pos[0] - window_width / 2 + window_width, cam_pos[1] - window_height / 2 + 10), color=(0, 0, 0, 1))
 
 
 def separate(a, b):
@@ -79,6 +88,8 @@ def separate(a, b):
 for i in range(3):
     create_spawner()
 while not should_quit:
+    if dick.as_duration == 0:
+        frameCount = 30
     for event in poll_events():
         if type(event) is CloseEvent:
             should_quit = True
@@ -86,6 +97,10 @@ while not should_quit:
             mouseX = event.x - window_width/2 + cam_pos[0]
             mouseY = event.y - window_height/2 + cam_pos[1]
         tlacidka()
+        if type(event) is MouseDownEvent:
+            if event.button == 'LEFT' and frameCount == 0:
+                bullets.append(Bullet(dick.x, dick.y, mouseX, mouseY))
+                frameCount = 30
 
     if koniec:
         continue
@@ -94,11 +109,7 @@ while not should_quit:
     set_camera(center=(window_width/2, window_height/2),
                position=(cam_pos[0], cam_pos[1]))
 
-    if frameCount == sec(0.7)+10:
-        bullets.append(Bullet(dick.x, dick.y, mouseX, mouseY))
-        frameCount = 0
-    else:
-        frameCount += 1
+    frameCount -= 1
 
     for i in zombiky:
         for j in zombiky:
@@ -112,7 +123,6 @@ while not should_quit:
     hud()
 
     if time.time() - start > 20:
-        print(time.time(), start)
         create_spawner()
         start = time.time()
 
@@ -147,6 +157,8 @@ while not should_quit:
             i.hp -= 1
         if i.hp > 0:
             newspawners.append(i)
+        else:
+            score += 1
     spawnery = newspawners
 
     dick.move()
