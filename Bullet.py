@@ -20,6 +20,6 @@ class Bullet:
         self.x += self.x_dif_new
         self.y += self.y_dif_new
         draw_circle(center=(self.x, self.y),
-                    radius=self.size, color=(0, 0, 0, 1))
+                    radius=self.size, color=(1, 1, 1, 1))
         self.hitbox = (self.x - self.size * sqrt(2) / 2, self.y - self.size * sqrt(2) / 2,
                        self.x + self.size * sqrt(2) / 2, self.y + self.size * sqrt(2) / 2)
