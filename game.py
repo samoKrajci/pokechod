@@ -33,10 +33,10 @@ class Mob:
     def chase(self, target):
         x_dif = target.x-self.x
         y_dif = target.y-self.y
-        x_dif /= sqrt(x_dif**2+y_dif**2+1)*self.vel
-        y_dif /= sqrt(x_dif**2+y_dif**2+1)*self.vel
-        self.x += x_dif
-        self.y += y_dif
+        x_dif_new = x_dif/sqrt(x_dif**2+y_dif**2+1)*self.vel
+        y_dif_new = y_dif/sqrt(x_dif**2+y_dif**2+1)*self.vel
+        self.x += x_dif_new
+        self.y += y_dif_new
 
     def update(self):
         draw_circle(center=(self.x, self.y),
@@ -44,10 +44,10 @@ class Mob:
 
 
 class Player:
-    def __init__(self):
+    def __init__(self, vel):
         self.x = 0
         self.y = 0
-        self.vel = 10
+        self.vel = vel
 
     def update(self):
         draw_circle(center=(self.x, self.y), radius=100, color=(1, 1, 1, 1))
@@ -63,8 +63,8 @@ class Player:
             self.x += self.vel
 
 
-zombik = Mob(100, 100, 100, 15)
-dick = Player()
+zombik = Mob(100, 100, 100, 1)
+dick = Player(3)
 
 while not should_quit:
     for event in poll_events():
@@ -79,8 +79,6 @@ while not should_quit:
 
     dick.move()
     dick.update()
-
-    print()
 
     move_camera(position=(0, 0), rotation=None, zoom=None)
 
