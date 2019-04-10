@@ -23,8 +23,8 @@ class Player:
         self.cooldowns = {'ability1': 5, 'ability2': 10, 'ability3': 30}
 
     def update(self, mouseX, mouseY, window_width, window_height):
-        angle = atan2((self.y + window_height/2 - mouseY),
-                      (self.x + window_width/2 - mouseX)) - degrees(90)
+        angle = atan2((self.y - mouseY),
+                      (self.x - mouseX)) - degrees(90)
         self.turbo -= 1
         if self.turbo > 0:
             self.vel = self.startingVel * 2
