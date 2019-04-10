@@ -10,8 +10,8 @@ import time
 
 window_width = 1800
 window_height = 1000
-map_width = 3000
-map_height = 3000
+map_width = 2000
+map_height = 2000
 
 score = 0
 koniec = False
@@ -19,9 +19,21 @@ open_window('PELKO', window_width, window_height)
 should_quit = False
 cam_pos = [0, 0]
 dick = Player(map_width, map_height)
-spawnery, zombiky, bullets = [], [], []
-mouseX, mouseY, frameCount = 0, 0, 30
+stromy, sutre, spawnery, zombiky, bullets = [], [], [], [], []
+mouseX, mouseY, frameCount = 0, 0, 0
 start = time.time()
+
+poc_stromy = randint(0, map_width*map_height/200000)
+poc_sutre = randint(0, map_width*map_height/200000)
+print(poc_stromy)
+print(poc_sutre)
+
+for i in range(poc_stromy):
+    stromy.append(Tree(randint(0, map_width)-map_width /
+                       2, randint(0, map_height)-map_height/2))
+for i in range(poc_stromy):
+    sutre.append(Rock(randint(0, map_width)-map_width /
+                      2, randint(0, map_height)-map_height/2))
 
 
 def create_spawner():
@@ -38,11 +50,17 @@ def check(x, y, done):
 def tlacidka():
     if type(event) is KeyDownEvent:
         key[event.key] = True
-        if event.key == 'X':
+        if event.key == 'X' and dick.cooldowns['turbo'] == 0:
             dick.set_turbo()
-        if event.key == 'C':
+            dick.cooldowns['turbo'] = sec(10)
+        if event.key == 'C' and dick.cooldowns['freeze'] == 0:
+            dick.cooldowns['freeze'] = sec(15)
             for i in zombiky:
                 i.frozen = sec(2)
+        if event.key == 'V' and dick.cooldowns['as'] == 0:
+            dick.cooldowns['freeze'] = sec(20)
+            global frameCount
+            #frameCount = 10
 
     if type(event) is KeyUpEvent:
         key[event.key] = False
@@ -51,11 +69,11 @@ def tlacidka():
 def hud():
     draw_text("HP: " + str(dick.hp), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+10, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
-    draw_text("Turbo:  " + str(dick.cooldowns['turbo']), 'Fixedsys', 20, position=(
+    draw_text("Turbo:  " + str(int(dick.cooldowns['turbo']/40)), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+window_width/4, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
-    draw_text("Ability 2:  " + str(dick.cooldowns['ability2']), 'Fixedsys', 20, position=(
+    draw_text("Freeze:  " + str(int(dick.cooldowns['freeze']/40)), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+window_width/2, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
-    draw_text("Ability 3:  " + str(dick.cooldowns['ability3']), 'Fixedsys', 20, position=(
+    draw_text("Attack speed:  " + str(int(dick.cooldowns['as']/40)), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+3*window_width/4, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
     draw_text("Score:  " + str(score), 'Fixedsys', 20, position=(
         cam_pos[0] - window_width / 2 + window_width, cam_pos[1] - window_height / 2 + 10), color=(0, 0, 0, 1))
@@ -77,20 +95,20 @@ while not should_quit:
         if type(event) is MouseMoveEvent:
             mouseX = event.x - window_width/2 + cam_pos[0]
             mouseY = event.y - window_height/2 + cam_pos[1]
-        if type(event) is MouseDownEvent:
-            if event.button == 'LEFT' and frameCount <= 0:
-                bullets.append(Bullet(dick.x, dick.y, mouseX, mouseY))
-                frameCount = 30
         tlacidka()
 
     if koniec:
         continue
 
+    if frameCount > sec(0.7) + 10:
+        bullets.append(Bullet(dick.x, dick.y, mouseX, mouseY))
+        frameCount = 0
+    else:
+        frameCount += 1
+
     cam_pos = [(dick.x+mouseX)/2, (dick.y+mouseY)/2]
     set_camera(center=(window_width/2, window_height/2),
                position=(cam_pos[0], cam_pos[1]))
-
-    frameCount -= 1
 
     for i in zombiky:
         for j in zombiky:
@@ -104,7 +122,6 @@ while not should_quit:
     hud()
 
     if time.time() - start > 20:
-        print(time.time(), start)
         create_spawner()
         start = time.time()
 
@@ -112,6 +129,11 @@ while not should_quit:
         i.update()
         if randint(0, 1000) < 5:
             zombiky.append(Mob(i.x, i.y, 2.8))
+
+    for suter in sutre:
+        suter.update()
+    for strom in stromy:
+        strom.update()
 
     newbullets = []
     for i in bullets:
