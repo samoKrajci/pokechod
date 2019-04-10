@@ -10,8 +10,8 @@ import time
 
 window_width = 1800
 window_height = 1000
-map_width = 2000
-map_height = 2000
+map_width = 1800
+map_height = 1000
 
 score = 0
 koniec = False
@@ -22,6 +22,7 @@ dick = Player(map_width, map_height)
 stromy, sutre, spawnery, zombiky, bullets = [], [], [], [], []
 mouseX, mouseY, frameCount = 0, 0, 0
 start = time.time()
+zombie_counter = 0
 
 #poc_stromy = randint(0, map_width*map_height/200000)
 #poc_sutre = randint(0, map_width*map_height/200000)
@@ -60,25 +61,27 @@ def tlacidka():
             for i in zombiky:
                 i.frozen = sec(2)
         if event.key == 'V' and dick.cooldowns['as'] == 0:
-            dick.cooldowns['freeze'] = sec(20)
+            dick.cooldowns['as'] = sec(20)
             global frameCount
-            #frameCount = 10
+            frameCount = 10
 
     if type(event) is KeyUpEvent:
         key[event.key] = False
 
 
 def hud():
+    draw_polygon((cam_pos[0]-map_width/2, cam_pos[1]-map_height/2), (cam_pos[0]-map_width/2, cam_pos[1]-map_height/2+45),
+                 (cam_pos[0]+map_width/2, cam_pos[1]-map_height/2+45), (cam_pos[0]+map_width/2, cam_pos[1]-map_height/2), color=(1, 1, 1, 1))
     draw_text("HP: " + str(dick.hp), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+10, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
     draw_text("Turbo:  " + str(int(dick.cooldowns['turbo']/40)), 'Fixedsys', 20, position=(
-        cam_pos[0]-window_width/2+window_width/4, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
+        cam_pos[0]-window_width/2+window_width/5, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
     draw_text("Freeze:  " + str(int(dick.cooldowns['freeze']/40)), 'Fixedsys', 20, position=(
-        cam_pos[0]-window_width/2+window_width/2, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
+        cam_pos[0]-window_width/2+2*window_width/5, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
     draw_text("Attack speed:  " + str(int(dick.cooldowns['as']/40)), 'Fixedsys', 20, position=(
-        cam_pos[0]-window_width/2+3*window_width/4, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
+        cam_pos[0]-window_width/2+3*window_width/5, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
     draw_text("Score:  " + str(score), 'Fixedsys', 20, position=(
-        cam_pos[0] - window_width / 2 + window_width, cam_pos[1] - window_height / 2 + 10), color=(0, 0, 0, 1))
+        cam_pos[0] - window_width / 2 + 4*window_width/5, cam_pos[1] - window_height / 2 + 10), color=(0, 0, 0, 1))
 
 
 def separate(a, b):
@@ -125,7 +128,6 @@ while not should_quit:
     fill(0, 0, 0)
     draw_polygon((-map_width/2, -map_height/2), (map_width/2, -map_height/2),
                  (map_width/2, map_height/2), (-map_width/2, map_height/2), color=(0.5, 1, 0.5, 1))
-    hud()
 
     if time.time() - start > 20:
         create_spawner()
@@ -133,8 +135,9 @@ while not should_quit:
 
     for i in spawnery:
         i.update()
-        if randint(0, 1000) < 5:
+        if randint(0, 1000) < 5 and zombie_counter < 10:
             zombiky.append(Mob(i.x, i.y, 2.8))
+            zombie_counter += 1
 
     newbullets = []
     for i in bullets:
@@ -149,6 +152,8 @@ while not should_quit:
         if not i.dead:
             i.update(dick.x, dick.y)
             newzombiz.append(i)
+        else:
+            zombie_counter -= 1
     zombiky = newzombiz
 
     newspawners = []
@@ -175,6 +180,8 @@ while not should_quit:
         separate(dick, strom)
         for zom in zombiky:
             separate(zom, strom)
+
+    hud()
 
     if not dick.dead:
         next_frame()
