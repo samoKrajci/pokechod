@@ -7,6 +7,7 @@ def degrees(d):
     import math
     return d / 180 * math.pi
 
+
 def rotate(vector, angle):
     """Rotate a vector (x, y) by an angle in radians."""
     import math
@@ -17,9 +18,11 @@ def rotate(vector, angle):
         sin * x + cos * y,
     )
 
+
 class EasyGameError(Exception):
     """All exceptions raised from this module are of this type."""
     pass
+
 
 class _Camera:
     def __init__(self, center, position, rotation, zoom):
@@ -27,6 +30,7 @@ class _Camera:
         self.position = position
         self.rotation = rotation
         self.zoom = zoom
+
 
 class _Context:
     _win = None
@@ -36,13 +40,17 @@ class _Context:
     _channels = {}
     _fonts = {}
 
+
 _ctx = _Context()
+
 
 class CloseEvent:
     """Happens when user clicks the X button on the window."""
     pass
 
+
 _symbol_dict = None
+
 
 def _symbol_to_string(key):
     global _symbol_dict
@@ -103,6 +111,7 @@ def _symbol_to_string(key):
         return None
     return _symbol_dict[key]
 
+
 class KeyDownEvent:
     """Happens when user pressed a key on the keyboard.
 
@@ -113,8 +122,10 @@ class KeyDownEvent:
                       'SPACE', 'ENTER', 'BACKSPACE', 'ESCAPE',
                       'LEFT', 'RIGHT', 'UP, 'DOWN'.
     """
+
     def __init__(self, key):
         self.key = key
+
 
 class KeyUpEvent:
     """Happens when user releases a key on the keyboard.
@@ -126,8 +137,10 @@ class KeyUpEvent:
                       'SPACE', 'ENTER', 'BACKSPACE', 'ESCAPE',
                       'LEFT', 'RIGHT', 'UP, 'DOWN'.
     """
+
     def __init__(self, key):
         self.key = key
+
 
 class TextEvent:
     """Happens when user types a text on the keyboard.
@@ -135,8 +148,10 @@ class TextEvent:
     Fields:
     text -- A string containing the typed text.
     """
+
     def __init__(self, text):
         self.text = text
+
 
 class MouseMoveEvent:
     """Happens when user moves the mouse.
@@ -147,11 +162,13 @@ class MouseMoveEvent:
     dx -- Difference from the previous X coordinate.
     dy -- Difference from the previous Y coordinate.
     """
+
     def __init__(self, x, y, dx, dy):
         self.x = x
         self.y = y
         self.dx = dx
         self.dy = dy
+
 
 class MouseDownEvent:
     """Happens when user presses a mouse button.
@@ -162,10 +179,12 @@ class MouseDownEvent:
     button -- String representation of the pressed button.
               These are: 'LEFT', 'RIGHT', 'MIDDLE'.
     """
+
     def __init__(self, x, y, button):
         self.x = x
         self.y = y
         self.button = button
+
 
 class MouseUpEvent:
     """Happens when user releases a mouse button.
@@ -176,14 +195,17 @@ class MouseUpEvent:
     button -- String representation of the released button.
               These are: 'LEFT', 'RIGHT', 'MIDDLE'.
     """
+
     def __init__(self, x, y, button):
         self.x = x
         self.y = y
         self.button = button
 
+
 def _update_camera():
     global _ctx
-    import pyglet, math
+    import pyglet
+    import math
     pyglet.gl.glViewport(0, 0, _ctx._win.width, _ctx._win.height)
     pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
     pyglet.gl.glLoadIdentity()
@@ -191,9 +213,11 @@ def _update_camera():
     pyglet.gl.glTranslatef(_ctx._camera.center[0], _ctx._camera.center[1], 0)
     pyglet.gl.glRotatef(-_ctx._camera.rotation/math.pi*180, 0, 0, 1)
     pyglet.gl.glScalef(_ctx._camera.zoom, _ctx._camera.zoom, 1)
-    pyglet.gl.glTranslatef(-_ctx._camera.position[0], -_ctx._camera.position[1], 0)
+    pyglet.gl.glTranslatef(-_ctx._camera.position[0], -
+                           _ctx._camera.position[1], 0)
 
-def open_window(title, width, height, fps=60):
+
+def open_window(title, width, height, fps=40):
     """Open a window with the specified parameters. Only one window can be open at any time.
 
     Arguments:
@@ -215,7 +239,8 @@ def open_window(title, width, height, fps=60):
     _ctx._channels = {}
     _ctx._fonts = {}
 
-    pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA, pyglet.gl.GL_ONE_MINUS_SRC_ALPHA)
+    pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA,
+                          pyglet.gl.GL_ONE_MINUS_SRC_ALPHA)
     pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
     _update_camera()
     _ctx._win.dispatch_events()
@@ -267,6 +292,7 @@ def open_window(title, width, height, fps=60):
             return
         _ctx._events.append(MouseUpEvent(x, y, button))
 
+
 def close_window():
     """Close the window. Raises an exception if no window is open."""
     global _ctx
@@ -274,6 +300,7 @@ def close_window():
         raise EasyGameError('window not open')
     _ctx._win.close()
     _ctx._win = None
+
 
 def poll_events():
     """Return a list of events that happened since the last call to this function.
@@ -310,6 +337,7 @@ def poll_events():
     _ctx._win.dispatch_events()
     return list(_ctx._events)
 
+
 def next_frame():
     """Show the content of the window and waits until it's time for the next frame."""
     global _ctx
@@ -318,6 +346,7 @@ def next_frame():
         raise EasyGameError('window not open')
     _ctx._win.flip()
     pyglet.clock.tick()
+
 
 def fill(r, g, b):
     """Fill the whole window with a single color.
@@ -330,6 +359,7 @@ def fill(r, g, b):
         raise EasyGameError('window not open')
     pyglet.gl.glClearColor(r, g, b, 1)
     _ctx._win.clear()
+
 
 class _Image:
     def __init__(self, img):
@@ -349,6 +379,7 @@ class _Image:
     def center(self):
         return (self._img.width//2, self._img.height//2)
 
+
 def load_image(path):
     """Load an image from the specified path. PNG, JPEG, and many more formats are supported.
 
@@ -359,6 +390,7 @@ def load_image(path):
     """
     import pyglet
     return _Image(pyglet.resource.image(path))
+
 
 def load_sheet(path, frame_width, frame_height):
     """Load a sprite sheet from the specified path and slices it into frames of the specified size.
@@ -377,6 +409,7 @@ def load_sheet(path, frame_width, frame_height):
         for y in map(lambda i: i * frame_height, range(img.height // frame_height)):
             frames.append(img.get_region(x, y, frame_width, frame_height))
     return frames
+
 
 def draw_image(image, position=(0, 0), anchor=None, rotation=0, scale=1, opacity=1):
     """Draw an image to the window, respecting the current camera settings.
@@ -406,6 +439,7 @@ def draw_image(image, position=(0, 0), anchor=None, rotation=0, scale=1, opacity
     image._sprite.opacity = int(opacity * 255)
     image._sprite.draw()
 
+
 def draw_polygon(*points, color=(1, 1, 1, 1)):
     """Draw a convex polygon, respecting the current camera settings.
 
@@ -425,9 +459,10 @@ def draw_polygon(*points, color=(1, 1, 1, 1)):
         vertices.append(pt[0])
         vertices.append(pt[1])
     pyglet.graphics.draw(len(points), pyglet.gl.GL_POLYGON,
-        ('v2f', vertices),
-        ('c4f', color * len(points)),
-    )
+                         ('v2f', vertices),
+                         ('c4f', color * len(points)),
+                         )
+
 
 def draw_line(*points, thickness=1, color=(1, 1, 1, 1)):
     """Draw a line between each two successive pair of points.
@@ -455,6 +490,7 @@ def draw_line(*points, thickness=1, color=(1, 1, 1, 1)):
             color=color,
         )
 
+
 def draw_circle(center, radius, color=(1, 1, 1, 1)):
     """Draws a circle with the specified center and radius.
 
@@ -474,6 +510,7 @@ def draw_circle(center, radius, color=(1, 1, 1, 1)):
         pts.append((x + math.cos(angle)*radius, y + math.sin(angle)*radius))
     draw_polygon(*pts, color=color)
 
+
 def draw_text(text, font, size, position=(0, 0), color=(1, 1, 1, 1), bold=False, italic=False):
     """Draw text using the selected font, respecting the current camera settings.
 
@@ -491,7 +528,8 @@ def draw_text(text, font, size, position=(0, 0), color=(1, 1, 1, 1), bold=False,
     if _ctx._win is None:
         raise EasyGameError('window not open')
     if (font, size) not in _ctx._fonts:
-        _ctx._fonts[(font, size)] = pyglet.text.Label(font_name=font, font_size=size)
+        _ctx._fonts[(font, size)] = pyglet.text.Label(
+            font_name=font, font_size=size)
     label = _ctx._fonts[(font, size)]
     label.text = text
     label.x, label.y = position
@@ -499,6 +537,7 @@ def draw_text(text, font, size, position=(0, 0), color=(1, 1, 1, 1), bold=False,
     label.bold = bold
     label.italic = italic
     label.draw()
+
 
 def set_camera(center=None, position=None, rotation=None, zoom=None):
     """Set properties of the camera. Only properties you set will be changed.
@@ -521,6 +560,7 @@ def set_camera(center=None, position=None, rotation=None, zoom=None):
     if zoom is not None:
         _ctx._camera.zoom = zoom
     _update_camera()
+
 
 def move_camera(position=None, rotation=None, zoom=None):
     """Change properties of the camera relative to its current properties.
@@ -549,6 +589,7 @@ def move_camera(position=None, rotation=None, zoom=None):
         _ctx._camera.zoom *= zoom
     _update_camera()
 
+
 def save_camera():
     """Save the current camera settings."""
     global _ctx
@@ -561,6 +602,7 @@ def save_camera():
         _ctx._camera.zoom,
     ))
 
+
 def restore_camera():
     """Restore the most recently saved and not yet restored camera settings."""
     global _ctx
@@ -571,13 +613,16 @@ def restore_camera():
     _ctx._camera = _ctx._saved_cameras.pop(-1)
     _update_camera()
 
+
 def reset_camera():
     """Reset camera to the original settings."""
     set_camera(center=(0, 0), position=(0, 0), rotation=0, zoom=1)
 
+
 class _Audio:
     def __init__(self, snd):
         self._snd = snd
+
 
 def load_audio(path, streaming=False):
     """Load an audio from the specified path.
@@ -591,6 +636,7 @@ def load_audio(path, streaming=False):
     import pyglet
     snd = pyglet.resource.media(path, streaming=streaming)
     return _Audio(snd)
+
 
 def play_audio(audio, channel=0, loop=False, volume=1):
     """Play an audio on the specified channel.
@@ -625,6 +671,7 @@ def play_audio(audio, channel=0, loop=False, volume=1):
     _ctx._channels[channel] = player
     player.play()
 
+
 def fix_rectangle_overlap(rect1, rect2):
     """Calculate the minimum vector required to move rect1 to fix the overlap between
     rect1 and rect2.
@@ -636,7 +683,7 @@ def fix_rectangle_overlap(rect1, rect2):
     ax0, ay0, ax1, ay1 = rect1
     bx0, by0, bx1, by1 = rect2
     left, right = max(0, ax1 - bx0), min(0, ax0 - bx1)
-    down, up    = max(0, ay1 - by0), min(0, ay0 - by1)
+    down, up = max(0, ay1 - by0), min(0, ay0 - by1)
     move_x = min(left, right, key=abs)
     move_y = min(down, up, key=abs)
     if abs(move_x) < abs(move_y):
