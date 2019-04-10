@@ -1,23 +1,23 @@
-from easygame import *
+#from easygame import *
 from math import *
 from random import *
 from Bullet import *
 from Player import *
 from Mob import *
 from Spawner import *
-from Camera import *
 
 
-window_height = 1000
 window_width = 1800
-map_height = 1000
+window_height = 1000
 map_width = 1800
+map_height = 1000
 
 open_window('Easy Game!', window_width, window_height)
 should_quit = False
 cam_pos = [0, 0]
-set_camera(center=(window_width/2, window_height/2),
-           position=(cam_pos[0], cam_pos[1]))
+dick = Player()
+spawnery, zombiky, bullets = [], [], []
+mouseX, mouseY, frameCount = 0, 0, 0
 
 
 def check(x, y):
@@ -29,6 +29,9 @@ def check(x, y):
 def tlacidka():
     if type(event) is KeyDownEvent:
         key[event.key] = True
+        if event.key == 'P':
+            spawnery.append(Spawner(
+                randint(-map_width / 2, map_width / 2), randint(-map_height / 2, map_height / 2), 1000))
     if type(event) is KeyUpEvent:
         key[event.key] = False
 
@@ -36,12 +39,12 @@ def tlacidka():
 def hud():
     draw_text("HP: " + str(dick.hp), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+10, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
-    draw_text("Ability 1:  " + str(dick.cooldowns['ability1']) + 's', 'Fixedsys', 20, position=(
-        cam_pos[0]-window_width/2+150, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
-    draw_text("Ability 2:  " + str(dick.cooldowns['ability2']) + 's', 'Fixedsys', 20, position=(
-        cam_pos[0]-window_width/2+350, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
-    draw_text("Ability 3:  " + str(dick.cooldowns['ability3']) + 's', 'Fixedsys', 20, position=(
-        cam_pos[0]-window_width/2+550, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
+    draw_text("Ability 1:  " + str(dick.cooldowns['ability1']), 'Fixedsys', 20, position=(
+        cam_pos[0]-window_width/2+window_width/4, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
+    draw_text("Ability 2:  " + str(dick.cooldowns['ability2']), 'Fixedsys', 20, position=(
+        cam_pos[0]-window_width/2+window_width/2, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
+    draw_text("Ability 3:  " + str(dick.cooldowns['ability3']), 'Fixedsys', 20, position=(
+        cam_pos[0]-window_width/2+3*window_width/4, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
 
 
 def separate(a, b):
@@ -50,10 +53,6 @@ def separate(a, b):
     a.y += dif[1]
 
 
-dick = Player()
-spawnery, zombiky, bullets = [], [], []
-mouseX, mouseY, frameCount = 0, 0, 0
-
 while not should_quit:
     for event in poll_events():
         if type(event) is CloseEvent:
@@ -61,13 +60,18 @@ while not should_quit:
         if type(event) is KeyDownEvent:
             if event.key == 'P':
                 spawnery.append(Spawner(
-                    randint(-map_width/2, map_width/2), randint(-map_height/2, map_height/2), 100))
+                    randint(-map_width/2, map_width/2), randint(-map_height/2, map_height/2), 1000))
+            if event.key == 'X':
+                pass
+
         if type(event) is MouseMoveEvent:
-            mouseX = event.x - window_width/2
-            mouseY = event.y - window_height/2
+            mouseX = event.x - window_width/2 + cam_pos[0]
+            mouseY = event.y - window_height/2 + cam_pos[1]
         tlacidka()
 
-    update_cam(dick, mouseX, mouseY)
+    cam_pos = [(dick.x+mouseX)/2, (dick.y+mouseY)/2]
+    set_camera(center=(window_width/2, window_height/2),
+               position=(cam_pos[0], cam_pos[1]))
 
     if frameCount == sec(0.7):
         bullets.append(Bullet(dick.x, dick.y, mouseX, mouseY))
@@ -91,12 +95,12 @@ while not should_quit:
         if randint(0, 1000) < 5:
             zombiky.append(Mob(i.x, i.y, 2.8))
 
+    newbullets = []
     for i in bullets:
-        if check(i.x, i.y):
-            i, bullets[len(bullets)-1] = bullets[len(bullets)-1], i
-            bullets.pop()
-        else:
+        if not check(i.x, i.y):
             i.update()
+            newbullets.append(i)
+    bullets = newbullets
 
     for i in zombiky:
         i.chase(dick)
