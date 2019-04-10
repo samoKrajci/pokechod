@@ -26,10 +26,9 @@ def tlacidka():
 
 
 class Mob:
-    def __init__(self, x, y, size, vel):
+    def __init__(self, x, y, vel):
         self.x = x
         self.y = y
-        self.size = size
         self.dead = False
         self.vel = vel
 
@@ -42,8 +41,7 @@ class Mob:
         self.y += y_dif_new
 
     def update(self):
-        draw_circle(center=(self.x, self.y),
-                    radius=self.size, color=(1, 0, 0, 1))
+        draw_image(load_image('img/zombie_lvl1.png'), position=(self.x, self.y), scale=0.15, opacity=1)
 
 
 class Player:
@@ -53,7 +51,7 @@ class Player:
         self.vel = vel
 
     def update(self):
-        draw_circle(center=(self.x, self.y), radius=100, color=(1, 1, 1, 1))
+        draw_circle(center=(self.x, self.y), radius=50, color=(1, 1, 1, 1))
 
     def move(self):
         if key['UP']:
@@ -68,7 +66,6 @@ class Player:
 
 spawnery = []
 zombiky = []
-zombik = Mob(100, 100, 100, 1)
 dick = Player(3)
 
 while not should_quit:
