@@ -7,15 +7,11 @@ from Mob import *
 from Spawner import *
 from Particles import *
 import time
-<<<<<<< HEAD
-=======
-
->>>>>>> d96a3ea01395fcf983d539f0b65e1b64c6ac5c1f
 
 window_width = 1800
 window_height = 1000
-map_width = 1800
-map_height = 1000
+map_width = 3000
+map_height = 3000
 
 koniec = False
 open_window('PELKO', window_width, window_height)
@@ -94,9 +90,9 @@ while not should_quit:
                 separate(i, j)
         separate(i, dick)
 
-    fill(1, 1, 0)
+    fill(0, 0, 0)
     draw_polygon((-map_width/2, -map_height/2), (map_width/2, -map_height/2),
-                 (map_width/2, map_height/2), (-map_width/2, map_height/2), color=(0, 1, 0, 1))
+                 (map_width/2, map_height/2), (-map_width/2, map_height/2), color=(0.5, 1, 0.5, 1))
     hud()
 
     if time.time() - start > 20:
