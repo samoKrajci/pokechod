@@ -7,10 +7,10 @@ from Mob import *
 from Spawner import *
 
 
-window_width = 800
-window_height = 600
-map_width = 800
-map_height = 600
+window_height = 1000
+window_width = 1800
+map_height = 1000
+map_width = 1800
 
 open_window('Easy Game!', window_width, window_height)
 should_quit = False
@@ -60,7 +60,9 @@ while not should_quit:
         if type(event) is KeyDownEvent:
             if event.key == 'P':
                 spawnery.append(Spawner(
-                    randint(-map_width/2, map_width/2), randint(-map_height/2, map_height/2), 100))
+                    randint(-map_width/2, map_width/2), randint(-map_height/2, map_height/2), 1000))
+            if event.key == 'X':
+
         if type(event) is MouseMoveEvent:
             mouseX = event.x
             mouseY = event.y
