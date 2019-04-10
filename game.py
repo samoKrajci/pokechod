@@ -1,6 +1,5 @@
 from easygame import *
 
-figure = load_image('figure.png')
 open_window('Easy Game!', 800, 600)
 should_quit = False
 while not should_quit:
@@ -8,8 +7,8 @@ while not should_quit:
         if type(event) is CloseEvent:
             should_quit = True
 
-    fill(1, 1, 0)
-    draw_image(figure, position=(400, 300))
+    fill(1, 1, 1)
+    draw_circle((400, 300), 300, color=(0.4, 0.3, 0.2, 1))
 
     next_frame()
 
