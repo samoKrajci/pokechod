@@ -2,6 +2,10 @@ from easygame import *
 from math import *
 
 
+def sec(a):
+    return a*40
+
+
 key = {'W': False, 'S': False, 'A': False, 'D': False}
 
 
@@ -10,17 +14,24 @@ class Player:
         self.x = 0
         self.y = 0
         self.vel = 5
-        self.size = 50
+        self.startingVel = 5
+        self.size = 30
         self.hp = 10
+        self.turbo = 0
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
         self.cooldowns = {'ability1': 5, 'ability2': 10, 'ability3': 30}
 
-    def update(self):
+    def update(self, mouseX, mouseY, window_width, window_height):
+        angle = atan2((self.y + window_height/2 - mouseY),
+                      (self.x + window_width/2 - mouseX)) - degrees(90)
+        self.turbo -= 1
+        if self.turbo > 0:
+            self.vel = self.startingVel * 2
+        else:
+            self.vel = self.startingVel
         draw_image(load_image('img/hrac.png'),
-                   position=(self.x, self.y))
-        # draw_circle(center=(self.x, self.y),
-        #            radius=self.size, color=(0, 0, 1, 1))
+                   position=(self.x, self.y), rotation=angle)
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
 
@@ -33,3 +44,6 @@ class Player:
             self.x -= self.vel
         if key['D']:
             self.x += self.vel
+
+    def set_turbo(self):
+        self.turbo = sec(4)

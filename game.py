@@ -31,7 +31,9 @@ def tlacidka():
         key[event.key] = True
         if event.key == 'P':
             spawnery.append(Spawner(
-                randint(-map_width / 2, map_width / 2), randint(-map_height / 2, map_height / 2), 1000))
+                randint(-map_width / 2, map_width / 2), randint(-map_height / 2, map_height / 2), 100))
+        if event.key == 'X':
+            dick.set_turbo()
     if type(event) is KeyUpEvent:
         key[event.key] = False
 
@@ -57,13 +59,6 @@ while not should_quit:
     for event in poll_events():
         if type(event) is CloseEvent:
             should_quit = True
-        if type(event) is KeyDownEvent:
-            if event.key == 'P':
-                spawnery.append(Spawner(
-                    randint(-map_width/2, map_width/2), randint(-map_height/2, map_height/2), 1000))
-            if event.key == 'X':
-                pass
-
         if type(event) is MouseMoveEvent:
             mouseX = event.x - window_width/2 + cam_pos[0]
             mouseY = event.y - window_height/2 + cam_pos[1]
@@ -73,7 +68,7 @@ while not should_quit:
     set_camera(center=(window_width/2, window_height/2),
                position=(cam_pos[0], cam_pos[1]))
 
-    if frameCount == sec(0.7):
+    if frameCount == sec(0.7)+10:
         bullets.append(Bullet(dick.x, dick.y, mouseX, mouseY))
         frameCount = 0
     else:
@@ -115,7 +110,7 @@ while not should_quit:
     spawnery = newspawns
 
     dick.move()
-    dick.update()
+    dick.update(mouseX, mouseY, window_width, window_height)
     move_camera(position=(0, 0), rotation=None, zoom=None)
     next_frame()
 
