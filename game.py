@@ -5,6 +5,7 @@ from Bullet import *
 from Player import *
 from Mob import *
 from Spawner import *
+from Camera import *
 
 
 window_height = 1000
@@ -60,14 +61,16 @@ while not should_quit:
         if type(event) is KeyDownEvent:
             if event.key == 'P':
                 spawnery.append(Spawner(
-                    randint(-map_width/2, map_width/2), randint(-map_height/2, map_height/2), 1000))
+                    randint(-map_width/2, map_width/2), randint(-map_height/2, map_height/2), 100))
         if type(event) is MouseMoveEvent:
-            mouseX = event.x
-            mouseY = event.y
+            mouseX = event.x - window_width/2
+            mouseY = event.y - window_height/2
         tlacidka()
+
+    update_cam(dick, mouseX, mouseY)
+
     if frameCount == sec(0.7):
-        bullets.append(Bullet(dick.x, dick.y, mouseX -
-                              window_width/2, mouseY-window_height/2))
+        bullets.append(Bullet(dick.x, dick.y, mouseX, mouseY))
         frameCount = 0
     else:
         frameCount += 1
@@ -76,6 +79,7 @@ while not should_quit:
         for j in zombiky:
             if i != j:
                 separate(i, j)
+        separate(i, dick)
 
     fill(1, 1, 0)
     draw_polygon((-map_width/2, -map_height/2), (map_width/2, -map_height/2),
@@ -85,7 +89,7 @@ while not should_quit:
     for i in spawnery:
         i.update()
         if randint(0, 1000) < 5:
-            zombiky.append(Mob(i.x, i.y, 2.8, 10))
+            zombiky.append(Mob(i.x, i.y, 2.8))
 
     for i in bullets:
         if check(i.x, i.y):
@@ -98,9 +102,13 @@ while not should_quit:
         i.chase(dick)
         i.update()
 
+    newspawns = []
     for i in spawnery:
-        if sqrt((dick.x-i.x)**2 + (dick.y-i.y)**2) < dick.size+i.size:
-            i.hp -= 1
+        if i.hp > 0:
+            if sqrt((dick.x-i.x)**2 + (dick.y-i.y)**2) < dick.size+i.size:
+                i.hp -= 1
+            newspawns.append(i)
+    spawnery = newspawns
 
     dick.move()
     dick.update()

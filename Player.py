@@ -14,7 +14,7 @@ class Player:
         self.x = 0
         self.y = 0
         self.vel = 5
-        self.size = 30
+        self.size = 50
         self.hp = 10
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
