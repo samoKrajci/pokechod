@@ -8,8 +8,8 @@ from Spawner import *
 from Particles import *
 import time
 
-window_width = 1800
-window_height = 1000
+window_width = 800
+window_height = 600
 map_width = 2000
 map_height = 2000
 
@@ -23,12 +23,8 @@ stromy, sutre, spawnery, zombiky, bullets = [], [], [], [], []
 mouseX, mouseY, frameCount = 0, 0, 0
 start = time.time()
 
-#poc_stromy = randint(0, map_width*map_height/200000)
-#poc_sutre = randint(0, map_width*map_height/200000)
 poc_stromy = randint(0, 6)
 poc_sutre = randint(0, 6)
-# print(poc_stromy)
-# print(poc_sutre)
 
 for i in range(poc_stromy):
     stromy.append(Tree(randint(0, map_width)-map_width /
@@ -60,9 +56,9 @@ def tlacidka():
             for i in zombiky:
                 i.frozen = sec(2)
         if event.key == 'V' and dick.cooldowns['as'] == 0:
-            dick.cooldowns['freeze'] = sec(20)
+            dick.cooldowns['as'] = sec(20)
             global frameCount
-            #frameCount = 10
+            frameCount = 10
 
     if type(event) is KeyUpEvent:
         key[event.key] = False
@@ -115,6 +111,8 @@ while not should_quit:
     cam_pos = [(dick.x+mouseX)/2, (dick.y+mouseY)/2]
     set_camera(center=(window_width/2, window_height/2),
                position=(cam_pos[0], cam_pos[1]))
+
+    frameCount -= 1
 
     for i in zombiky:
         for j in zombiky:
