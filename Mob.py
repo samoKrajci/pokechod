@@ -37,9 +37,9 @@ class Mob:
         for i in bullets:
             vect = fix_rectangle_overlap(self.hitbox, i.hitbox)
             if vect != (0, 0):
+                i.gone = True
                 self.dead = True
                 break
-
 
     def update(self):
         draw_image(load_image('img/mob.png'),
