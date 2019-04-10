@@ -17,6 +17,7 @@ should_quit = False
 cam_pos = [0, 0]
 set_camera(center=(window_width/2, window_height/2),
            position=(cam_pos[0], cam_pos[1]))
+
 dick = Player()
 spawnery, zombiky, bullets = [], [], []
 mouseX, mouseY, frameCount = 0, 0, 0
@@ -34,6 +35,8 @@ def tlacidka():
         if event.key == 'P':
             spawnery.append(Spawner(
                 randint(-map_width / 2, map_width / 2), randint(-map_height / 2, map_height / 2), 1000))
+        if event.key == 'X':
+            dick.set_turbo()
     if type(event) is KeyUpEvent:
         key[event.key] = False
 
@@ -63,6 +66,7 @@ while not should_quit:
             mouseX = event.x
             mouseY = event.y
         tlacidka()
+
     if frameCount == sec(0.7):
         bullets.append(Bullet(dick.x, dick.y, mouseX -
                               window_width/2, mouseY-window_height/2))
@@ -85,21 +89,21 @@ while not should_quit:
         if i.hp > 0 and randint(0, 1000) < 5:
             zombiky.append(Mob(i.x, i.y, 2.8, 10))
 
+    newbullets = []
     for i in bullets:
-        if check(i.x, i.y):
-            i, bullets[len(bullets)-1] = bullets[len(bullets)-1], i
-            bullets.pop()
-        else:
+        if not check(i.x, i.y):
             i.update()
+            newbullets.append(i)
+    bullets = newbullets
 
     for i in zombiky:
         i.chase(dick)
-        i.update(dick.x, dick.y)
+        i.update()
 
     for i in spawnery:
         if sqrt((dick.x-i.x)**2 + (dick.y-i.y)**2) < dick.size+i.size:
             i.hp -= 1
-    #print(dick.x, dick.y)
+
     dick.move()
     dick.update(mouseX, mouseY, window_width, window_height)
     move_camera(position=(0, 0), rotation=None, zoom=None)

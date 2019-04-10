@@ -14,4 +14,3 @@ class Spawner:
                    position=(self.x, self.y))
         draw_circle(center=(self.x, self.y), radius=self.size,
                     color=(0, 0, 0, 1-self.hp/self.max_hp))
-        print(self.hp)
