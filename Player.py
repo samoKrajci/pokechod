@@ -47,13 +47,13 @@ class Player:
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
 
     def move(self):
-        if key['W'] and not check(self.x, self.y + self.vel, self.mw, self.mh):
+        if key['W'] and not check(self.x, self.y + self.vsel, self.mw, self.mh):
             self.y += self.vel
         if key['S'] and not check(self.x, self.y - self.vel, self.mw, self.mh):
             self.y -= self.vel
         if key['A'] and not check(self.x - self.vel, self.y, self.mw, self.mh):
             self.x -= self.vel
-        if key['D'] and notcheck(self.x + self.vel, self.y, self.mw, self.mh):
+        if key['D'] and not check(self.x + self.vel, self.y, self.mw, self.mh):
             self.x += self.vel
 
     def set_turbo(self):
