@@ -26,11 +26,12 @@ def tlacidka():
 
 
 class Mob:
-    def __init__(self, x, y, vel):
+    def __init__(self, x, y, vel, size):
         self.x = x
         self.y = y
         self.dead = False
         self.vel = vel
+        self.size = size
 
     def chase(self, target):
         x_dif = target.x-self.x
@@ -84,7 +85,7 @@ while not should_quit:
         draw_circle(center=(i[0], i[1]),
                     radius=20, color=(1, 1, 0, 1))
         if randint(0, 1000) < 5:
-            zombiky.append(Mob(i[0], i[1], 100, 1))
+            zombiky.append(Mob(i[0], i[1], 3, 1))
 
     for i in zombiky:
         i.chase(dick)
