@@ -1,12 +1,14 @@
 from easygame import *
 from math import *
 
-window_height = 1000
-window_width = 1800
+window_height = 500
+window_width = 500
 
 open_window('Easy Game!', window_width, window_height)
 should_quit = False
-set_camera(center=(window_width/2, window_height/2), position=(0, 0))
+cam_pos = [0, 0]
+set_camera(center=(window_width/2, window_height/2),
+           position=(cam_pos[0], cam_pos[1]))
 
 key = {}
 key['UP'] = False
@@ -22,6 +24,11 @@ def tlacidka():
         key[event.key] = False
 
 
+def hud():
+    draw_text("HP: " + str(dick.hp), 'Fixedsys', 32, position=(
+        cam_pos[0]-window_width/2+10, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
+
+
 class Mob:
     def __init__(self, x, y, size, vel):
         self.x = x
@@ -29,6 +36,8 @@ class Mob:
         self.size = size
         self.dead = False
         self.vel = vel
+        self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
+                       self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
 
     def chase(self, target):
         x_dif = target.x-self.x
@@ -38,19 +47,34 @@ class Mob:
         self.x += x_dif_new
         self.y += y_dif_new
 
+    def attack(self, player):
+        vect = fix_rectangle_overlap(self.hitbox, player.hitbox)
+        print(vect)
+        if vect != (0, 0):
+            player.hp -= 1
+
     def update(self):
         draw_circle(center=(self.x, self.y),
-                    radius=self.size, color=(1, 0, 0, 1))
+                    radius=self.size, color=(0, 0, 0, 1))
+        self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
+                       self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
 
 
 class Player:
-    def __init__(self, vel):
+    def __init__(self, size, vel, hp):
         self.x = 0
         self.y = 0
         self.vel = vel
+        self.size = size
+        self.hp = hp
+        self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
+                       self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
 
     def update(self):
-        draw_circle(center=(self.x, self.y), radius=100, color=(1, 1, 1, 1))
+        draw_circle(center=(self.x, self.y),
+                    radius=self.size, color=(0, 0, 1, 1))
+        self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
+                       self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
 
     def move(self):
         if key['UP']:
@@ -63,8 +87,8 @@ class Player:
             self.x += self.vel
 
 
-zombik = Mob(100, 100, 100, 1)
-dick = Player(3)
+zombik = Mob(100, 100, 10, 1)
+dick = Player(30, 3, 10)
 
 while not should_quit:
     for event in poll_events():
@@ -73,6 +97,8 @@ while not should_quit:
         tlacidka()
 
     fill(1, 1, 0)
+    hud()
+    zombik.attack(dick)
 
     zombik.chase(dick)
     zombik.update()
