@@ -9,8 +9,8 @@ from Particles import *
 import time
 
 
-window_width = 1800
-window_height = 1000
+window_width = 800
+window_height = 600
 map_width = 1800
 map_height = 1000
 
@@ -38,9 +38,11 @@ def check(x, y, done):
 def tlacidka():
     if type(event) is KeyDownEvent:
         key[event.key] = True
-        if event.key == 'X':
+        if event.key == 'X' and dick.cooldowns['turbo'] == 0:
             dick.set_turbo()
-        if event.key == 'C':
+            dick.cooldowns['turbo'] = sec(10)
+        if event.key == 'C' and dick.cooldowns['freeze'] == 0:
+            dick.cooldowns['freeze'] = sec(15)
             for i in zombiky:
                 i.frozen = sec(2)
 
@@ -51,11 +53,11 @@ def tlacidka():
 def hud():
     draw_text("HP: " + str(dick.hp), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+10, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
-    draw_text("Turbo:  " + str(dick.cooldowns['turbo']), 'Fixedsys', 20, position=(
+    draw_text("Turbo:  " + str(int(dick.cooldowns['turbo']/40)), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+window_width/4, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
-    draw_text("Ability 2:  " + str(dick.cooldowns['ability2']), 'Fixedsys', 20, position=(
+    draw_text("Freeze:  " + str(int(dick.cooldowns['freeze']/40)), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+window_width/2, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
-    draw_text("Ability 3:  " + str(dick.cooldowns['ability3']), 'Fixedsys', 20, position=(
+    draw_text("Ability 3:  " + str(int(dick.cooldowns['ability3']/40)), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+3*window_width/4, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
 
 
@@ -101,7 +103,6 @@ while not should_quit:
     hud()
 
     if time.time() - start > 20:
-        print(time.time(), start)
         create_spawner()
         start = time.time()
 
