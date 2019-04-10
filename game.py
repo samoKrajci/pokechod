@@ -15,7 +15,7 @@ map_height = 1000
 open_window('Easy Game!', window_width, window_height)
 should_quit = False
 cam_pos = [0, 0]
-dick = Player()
+dick = Player(map_width, map_height)
 spawnery, zombiky, bullets = [], [], []
 mouseX, mouseY, frameCount = 0, 0, 0
 
