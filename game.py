@@ -40,6 +40,10 @@ def tlacidka():
         key[event.key] = True
         if event.key == 'X':
             dick.set_turbo()
+        if event.key == 'C':
+            for i in zombiky:
+                i.frozen = sec(2)
+
     if type(event) is KeyUpEvent:
         key[event.key] = False
 

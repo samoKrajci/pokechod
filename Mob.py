@@ -17,19 +17,24 @@ class Mob:
         self.size = 50
         self.vel = vel
         self.dead = False
+        self.frozen = 0
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
 
     def chase(self, target, bullets):
-        if self.cooldown != 0:
-            self.cooldown -= 1
+        if self.frozen == 0:
+            if self.cooldown != 0:
+                self.cooldown -= 1
+                return
+            x_dif = target.x-self.x
+            y_dif = target.y-self.y
+            x_dif_new = x_dif/sqrt(x_dif**2+y_dif**2+1)*self.vel
+            y_dif_new = y_dif/sqrt(x_dif**2+y_dif**2+1)*self.vel
+            self.x += x_dif_new
+            self.y += y_dif_new
+        else:
+            self.frozen -= 1
             return
-        x_dif = target.x-self.x
-        y_dif = target.y-self.y
-        x_dif_new = x_dif/sqrt(x_dif**2+y_dif**2+1)*self.vel
-        y_dif_new = y_dif/sqrt(x_dif**2+y_dif**2+1)*self.vel
-        self.x += x_dif_new
-        self.y += y_dif_new
         vect = fix_rectangle_overlap(self.hitbox, target.hitbox)
         if vect != (0, 0):
             target.hp -= 1
