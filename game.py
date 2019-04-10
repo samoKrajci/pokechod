@@ -4,11 +4,13 @@ from random import *
 
 window_height = 600
 window_width = 1000
-
+map_width = 1000
+map_height = 600
 open_window('Easy Game!', window_width, window_height)
 should_quit = False
-set_camera(center=(window_width/2, window_height/2), position=(0, 0))
-
+cam_pos = [0, 0]
+set_camera(center=(window_width/2, window_height/2),
+           position=(cam_pos[0], cam_pos[1]))
 key = {}
 key['UP'] = False
 key['DOWN'] = False
@@ -64,6 +66,8 @@ class Player:
             self.x += self.vel
 
 
+spawnery = []
+zombiky = []
 zombik = Mob(100, 100, 100, 1)
 dick = Player(3)
 
@@ -71,12 +75,23 @@ while not should_quit:
     for event in poll_events():
         if type(event) is CloseEvent:
             should_quit = True
+        if type(event) is KeyDownEvent:
+            if event.key == 'P':
+                spawnery.append([randint(-map_width, map_width), randint(-map_height, map_height)])
         tlacidka()
 
     fill(1, 1, 0)
+    draw_polygon((-map_width/2, -map_height/2), (map_width/2, -map_height/2), (map_width/2, map_height/2), (-map_width/2, map_height/2), color=(0, 1, 0, 1))
 
-    zombik.chase(dick)
-    zombik.update()
+    for i in spawnery:
+        draw_circle(center=(i[0], i[1]),
+                    radius=20, color=(1, 1, 0, 1))
+        if randint(0, 1000) < 5:
+            zombiky.append(Mob(i[0], i[1], 100, 1))
+
+    for i in zombiky:
+        i.chase(dick)
+        i.update()
 
     dick.move()
     dick.update()
