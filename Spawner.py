@@ -11,6 +11,4 @@ class Spawner:
 
     def update(self):
         draw_image(load_image('img/spawner.png'),
-                   position=(self.x, self.y))
-        draw_circle(center=(self.x, self.y), radius=self.size,
-                    color=(0, 0, 0, 1-self.hp/self.max_hp))
+                   position=(self.x, self.y), opacity=self.hp/self.max_hp)
