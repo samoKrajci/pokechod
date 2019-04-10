@@ -33,8 +33,8 @@ class Mob:
     def chase(self, target):
         x_dif = target.x-self.x
         y_dif = target.y-self.y
-        x_dif /= sqrt(x_dif**2+y_dif**2+1)
-        y_dif /= sqrt(x_dif**2+y_dif**2+1)
+        x_dif /= sqrt(x_dif**2+y_dif**2+1)*self.vel
+        y_dif /= sqrt(x_dif**2+y_dif**2+1)*self.vel
         self.x += x_dif
         self.y += y_dif
 
