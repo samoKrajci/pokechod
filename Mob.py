@@ -41,8 +41,9 @@ class Mob:
                 self.dead = True
                 break
 
-    def update(self):
+    def update(self, dickX, dickY):
+        angle = atan2((self.y - dickY), (self.x - dickX)) + degrees(90)
         draw_image(load_image('img/mob.png'),
-                   position=(self.x, self.y))
+                   position=(self.x, self.y), rotation=angle)
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
