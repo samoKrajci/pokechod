@@ -8,11 +8,10 @@ from Spawner import *
 from Particles import *
 import time
 
-
 window_width = 1800
 window_height = 1000
-map_width = 1800
-map_height = 1000
+map_width = 3000
+map_height = 3000
 
 score = 0
 koniec = False
@@ -21,7 +20,7 @@ should_quit = False
 cam_pos = [0, 0]
 dick = Player(map_width, map_height)
 spawnery, zombiky, bullets = [], [], []
-mouseX, mouseY, frameCount = 0, 0, 0
+mouseX, mouseY, frameCount = 0, 0, 30
 start = time.time()
 
 
@@ -78,6 +77,10 @@ while not should_quit:
             mouseX = event.x - window_width/2 + cam_pos[0]
             mouseY = event.y - window_height/2 + cam_pos[1]
         tlacidka()
+        if type(event) is MouseDownEvent:
+            if event.button == 'LEFT' and frameCount == 0:
+                bullets.append(Bullet(dick.x, dick.y, mouseX, mouseY))
+                frameCount = 30
 
     if koniec:
         continue
@@ -86,11 +89,7 @@ while not should_quit:
     set_camera(center=(window_width/2, window_height/2),
                position=(cam_pos[0], cam_pos[1]))
 
-    if frameCount == sec(0.7)+10:
-        bullets.append(Bullet(dick.x, dick.y, mouseX, mouseY))
-        frameCount = 0
-    else:
-        frameCount += 1
+    frameCount -= 1
 
     for i in zombiky:
         for j in zombiky:
@@ -98,9 +97,9 @@ while not should_quit:
                 separate(i, j)
         separate(i, dick)
 
-    fill(1, 1, 0)
+    fill(0, 0, 0)
     draw_polygon((-map_width/2, -map_height/2), (map_width/2, -map_height/2),
-                 (map_width/2, map_height/2), (-map_width/2, map_height/2), color=(0, 1, 0, 1))
+                 (map_width/2, map_height/2), (-map_width/2, map_height/2), color=(0.5, 1, 0.5, 1))
     hud()
 
     if time.time() - start > 20:
