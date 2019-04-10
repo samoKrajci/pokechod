@@ -17,6 +17,7 @@ should_quit = False
 cam_pos = [0, 0]
 set_camera(center=(window_width/2, window_height/2),
            position=(cam_pos[0], cam_pos[1]))
+
 dick = Player()
 spawnery, zombiky, bullets = [], [], []
 mouseX, mouseY, frameCount = 0, 0, 0
@@ -64,12 +65,13 @@ while not should_quit:
                 spawnery.append(Spawner(
                     randint(-map_width/2, map_width/2), randint(-map_height/2, map_height/2), 1000))
             if event.key == 'X':
-                pass
+                dick.set_turbo()
 
         if type(event) is MouseMoveEvent:
             mouseX = event.x
             mouseY = event.y
         tlacidka()
+
     if frameCount == sec(0.7):
         bullets.append(Bullet(dick.x, dick.y, mouseX -
                               window_width/2, mouseY-window_height/2))
@@ -107,8 +109,8 @@ while not should_quit:
         if sqrt((dick.x-i.x)**2 + (dick.y-i.y)**2) < dick.size+i.size:
             i.hp -= 1
 
-    dick.move()
     dick.update()
+    dick.move()
     move_camera(position=(0, 0), rotation=None, zoom=None)
     next_frame()
 
