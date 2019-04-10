@@ -1,18 +1,20 @@
+from easygame import *
 from math import *
 from random import *
 from Bullet import *
 from Player import *
 from Mob import *
 from Spawner import *
-import time
+from Particles import *
 
 
-window_width = 800
-window_height = 600
+window_width = 1800
+window_height = 1000
 map_width = 1800
 map_height = 1000
 
-open_window('Easy Game!', window_width, window_height)
+koniec = False
+open_window('PELKO', window_width, window_height)
 should_quit = False
 cam_pos = [0, 0]
 dick = Player()
@@ -68,6 +70,9 @@ while not should_quit:
             mouseX = event.x - window_width/2 + cam_pos[0]
             mouseY = event.y - window_height/2 + cam_pos[1]
         tlacidka()
+
+    if koniec:
+        continue
 
     cam_pos = [(dick.x+mouseX)/2, (dick.y+mouseY)/2]
     set_camera(center=(window_width/2, window_height/2),
@@ -126,6 +131,14 @@ while not should_quit:
     dick.move()
     dick.update(mouseX, mouseY)
     move_camera(position=(0, 0), rotation=None, zoom=None)
-    next_frame()
+
+    if not dick.dead:
+        next_frame()
+    else:
+        next_frame()
+        draw_text('GAY OVER', 'Fixedsys', 100,
+                  position=cam_pos, color=(1, 0, 0, 1))
+        next_frame()
+        koniec = True
 
 close_window()

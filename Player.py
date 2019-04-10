@@ -16,15 +16,18 @@ class Player:
         self.vel = 5
         self.startingVel = 5
         self.size = 30
-        self.hp = 10
+        self.hp = 5
         self.turbo = 0
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
         self.cooldowns = {'turbo': 15, 'ability2': 20, 'ability3': 30}
+        self.dead = False
 
     def update(self, mouseX, mouseY):
+        if self.hp <= 0:
+            self.dead = True
         angle = atan2((self.y - mouseY),
-                      (self.x - mouseX)) - degrees(90)
+                      (self.x - mouseX)) + pi/2
         self.turbo -= 1
         if self.turbo > 0:
             self.vel = self.startingVel * 2
