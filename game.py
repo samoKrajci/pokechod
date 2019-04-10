@@ -22,8 +22,8 @@ mouseX, mouseY, frameCount = 0, 0, 0
 start = 0
 
 
-def check(x, y):
-    if x > map_width/2 or x < -map_width/2 or y > map_height/2 or y < -map_height/2:
+def check(x, y, done):
+    if x > map_width/2 or x < -map_width/2 or y > map_height/2 or y < -map_height/2 or done:
         return True
     return False
 
@@ -96,7 +96,7 @@ while not should_quit:
 
     newbullets = []
     for i in bullets:
-        if not check(i.x, i.y):
+        if not check(i.x, i.y, i.gone):
             i.update()
             newbullets.append(i)
     bullets = newbullets
