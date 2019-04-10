@@ -7,16 +7,22 @@ from Mob import *
 from Spawner import *
 
 
-window_height = 600
-window_width = 800
-map_width = 1000
+window_height = 1000
+window_width = 1800
 map_height = 1000
+map_width = 1800
 
 open_window('Easy Game!', window_width, window_height)
 should_quit = False
 cam_pos = [0, 0]
 set_camera(center=(window_width/2, window_height/2),
            position=(cam_pos[0], cam_pos[1]))
+
+
+def check(x, y):
+    if x > map_width/2 or x < map_width/2 or y > map_height/2 or y < map_height/2:
+        return True
+    return False
 
 
 def tlacidka():
@@ -48,7 +54,7 @@ while not should_quit:
         if type(event) is KeyDownEvent:
             if event.key == 'P':
                 spawnery.append(Spawner(
-                    randint(-map_width/2, map_width/2), randint(-map_height/2, map_height/2), 100))
+                    randint(-map_width/2, map_width/2), randint(-map_height/2, map_height/2), 1000))
         if type(event) is MouseMoveEvent:
             mouseX = event.x
             mouseY = event.y
@@ -76,7 +82,11 @@ while not should_quit:
             zombiky.append(Mob(i.x, i.y, 2.8, 10))
 
     for i in bullets:
-        i.update()
+        if check(i.x, i.y):
+            i, bullets[len(bullets)-1] = bullets[len(bullets)-1], i
+            bullets.pop()
+        else:
+            i.update()
 
     for i in zombiky:
         i.chase(dick)
