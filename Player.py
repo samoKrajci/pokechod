@@ -24,7 +24,7 @@ class Player:
         self.vel = 5
         self.startingVel = 5
         self.size = 30
-        self.hp = 5
+        self.hp = 1
         self.turbo = 0
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
@@ -47,7 +47,7 @@ class Player:
         else:
             self.vel = self.startingVel
         draw_image(load_image('img/hrac.png'),
-                   position=(self.x, self.y), rotation=angle)
+                   position=(self.x, self.y), anchor=(50, 50), rotation=angle)
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
 
