@@ -47,13 +47,15 @@ while not should_quit:
             should_quit = True
         if type(event) is KeyDownEvent:
             if event.key == 'P':
-                spawnery.append(Spawner(randint(-map_width/2, map_width/2), randint(-map_height/2, map_height/2), 100))
+                spawnery.append(Spawner(
+                    randint(-map_width/2, map_width/2), randint(-map_height/2, map_height/2), 100))
         if type(event) is MouseMoveEvent:
             mouseX = event.x
             mouseY = event.y
         tlacidka()
     if frameCount == sec(0.7):
-        bullets.append(Bullet(dick.x, dick.y, mouseX, mouseY))
+        bullets.append(Bullet(dick.x, dick.y, mouseX -
+                              window_width/2, mouseY-window_height/2))
         frameCount = 0
     else:
         frameCount += 1
