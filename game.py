@@ -14,6 +14,7 @@ window_height = 1000
 map_width = 1800
 map_height = 1000
 
+score = 0
 koniec = False
 open_window('PELKO', window_width, window_height)
 should_quit = False
@@ -53,6 +54,8 @@ def hud():
         cam_pos[0]-window_width/2+window_width/2, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
     draw_text("Ability 3:  " + str(dick.cooldowns['ability3']), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+3*window_width/4, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
+    draw_text("Score:  " + str(score), 'Fixedsys', 20, position=(
+        cam_pos[0] - window_width / 2 + window_width, cam_pos[1] - window_height / 2 + 10), color=(0, 0, 0, 1))
 
 
 def separate(a, b):
@@ -127,6 +130,8 @@ while not should_quit:
             i.hp -= 1
         if i.hp > 0:
             newspawners.append(i)
+        else:
+            score += 1
     spawnery = newspawners
 
     dick.move()
