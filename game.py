@@ -19,6 +19,12 @@ set_camera(center=(window_width/2, window_height/2),
            position=(cam_pos[0], cam_pos[1]))
 
 
+def check(x, y):
+    if x > map_width/2 or x < -map_width/2 or y > map_height/2 or y < -map_height/2:
+        return True
+    return False
+
+
 def tlacidka():
     if type(event) is KeyDownEvent:
         key[event.key] = True
@@ -75,8 +81,12 @@ while not should_quit:
         if randint(0, 1000) < 5:
             zombiky.append(Mob(i.x, i.y, 2.8, 10))
 
+    newbullets = []
     for i in bullets:
-        i.update()
+        if not check(i.x, i.y):
+            i.update()
+            newbullets.append(i)
+    bullets = newbullets
 
     for i in zombiky:
         i.chase(dick)
