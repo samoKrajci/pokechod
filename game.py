@@ -6,7 +6,6 @@ from Player import *
 from Mob import *
 from Spawner import *
 from Particles import *
-from time import *
 
 
 window_width = 1800
@@ -21,10 +20,11 @@ cam_pos = [0, 0]
 dick = Player()
 spawnery, zombiky, bullets = [], [], []
 mouseX, mouseY, frameCount = 0, 0, 0
+start = 0
 
 
-def check(x, y):
-    if x > map_width/2 or x < -map_width/2 or y > map_height/2 or y < -map_height/2:
+def check(x, y, done):
+    if x > map_width/2 or x < -map_width/2 or y > map_height/2 or y < -map_height/2 or done:
         return True
     return False
 
@@ -32,9 +32,6 @@ def check(x, y):
 def tlacidka():
     if type(event) is KeyDownEvent:
         key[event.key] = True
-        if event.key == 'P':
-            spawnery.append(Spawner(
-                randint(-map_width / 2, map_width / 2), randint(-map_height / 2, map_height / 2), 100))
         if event.key == 'X':
             dick.set_turbo()
     if type(event) is KeyUpEvent:
@@ -91,6 +88,11 @@ while not should_quit:
                  (map_width/2, map_height/2), (-map_width/2, map_height/2), color=(0, 1, 0, 1))
     hud()
 
+    if start == 0 or time.time() - start > 20:
+        spawnery.append(Spawner(
+            randint(-map_width / 2, map_width / 2), randint(-map_height / 2, map_height / 2), 100))
+        start = time.time()
+
     for i in spawnery:
         i.update()
         if randint(0, 1000) < 5:
@@ -98,7 +100,7 @@ while not should_quit:
 
     newbullets = []
     for i in bullets:
-        if not check(i.x, i.y):
+        if not check(i.x, i.y, i.gone):
             i.update()
             newbullets.append(i)
     bullets = newbullets
@@ -115,7 +117,8 @@ while not should_quit:
     for i in spawnery:
         if sqrt((dick.x-i.x)**2 + (dick.y-i.y)**2) < dick.size+i.size:
             i.hp -= 1
-        newspawners.append(i)
+        if i.hp > 0:
+            newspawners.append(i)
     spawnery = newspawners
 
     dick.move()
