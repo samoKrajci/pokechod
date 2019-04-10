@@ -69,6 +69,7 @@ def separate(a, b):
 
 for i in range(3):
     create_spawner()
+
 while not should_quit:
     for event in poll_events():
         if type(event) is CloseEvent:
@@ -76,11 +77,11 @@ while not should_quit:
         if type(event) is MouseMoveEvent:
             mouseX = event.x - window_width/2 + cam_pos[0]
             mouseY = event.y - window_height/2 + cam_pos[1]
-        tlacidka()
         if type(event) is MouseDownEvent:
-            if event.button == 'LEFT' and frameCount == 0:
+            if event.button == 'LEFT' and frameCount <= 0:
                 bullets.append(Bullet(dick.x, dick.y, mouseX, mouseY))
                 frameCount = 30
+        tlacidka()
 
     if koniec:
         continue
