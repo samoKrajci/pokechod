@@ -28,13 +28,16 @@ class Player:
         self.turbo = 0
         self.hitbox = (self.x-self.size*sqrt(2)/2, self.y-self.size*sqrt(2)/2,
                        self.x+self.size*sqrt(2)/2, self.y+self.size*sqrt(2)/2)
-        self.cooldowns = {'turbo': 0, 'freeze': 0, 'ability3': 0}
+        self.cooldowns = {'turbo': 0, 'freeze': 0, 'as': 0}
         self.dead = False
+        self.as_duration = 0
 
     def update(self, mouseX, mouseY):
         if self.hp <= 0:
             self.dead = True
-        print(self.cooldowns['turbo'])
+        if self.as_duration != 0:
+            self.as_duration -= 1
+
         for x in self.cooldowns:
             if self.cooldowns[x] != 0:
                 self.cooldowns[x] -= 1

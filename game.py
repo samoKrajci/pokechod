@@ -45,6 +45,11 @@ def tlacidka():
             dick.cooldowns['freeze'] = sec(15)
             for i in zombiky:
                 i.frozen = sec(2)
+        if event.key == 'V' and dick.cooldowns['as'] == 0:
+            dick.cooldowns['freeze'] = sec(20)
+            global frameCount
+            #frameCount = 10
+
 
     if type(event) is KeyUpEvent:
         key[event.key] = False
@@ -57,7 +62,7 @@ def hud():
         cam_pos[0]-window_width/2+window_width/4, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
     draw_text("Freeze:  " + str(int(dick.cooldowns['freeze']/40)), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+window_width/2, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
-    draw_text("Ability 3:  " + str(int(dick.cooldowns['ability3']/40)), 'Fixedsys', 20, position=(
+    draw_text("Attack speed:  " + str(int(dick.cooldowns['as']/40)), 'Fixedsys', 20, position=(
         cam_pos[0]-window_width/2+3*window_width/4, cam_pos[1]-window_height/2+10), color=(0, 0, 0, 1))
     draw_text("Score:  " + str(score), 'Fixedsys', 20, position=(
         cam_pos[0] - window_width / 2 + window_width, cam_pos[1] - window_height / 2 + 10), color=(0, 0, 0, 1))
@@ -72,6 +77,8 @@ def separate(a, b):
 for i in range(3):
     create_spawner()
 while not should_quit:
+    if dick.as_duration == 0:
+        frameCount = 30
     for event in poll_events():
         if type(event) is CloseEvent:
             should_quit = True
